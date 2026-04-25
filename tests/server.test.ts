@@ -1,6 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { createServer, SERVER_INFO } from '../src/server.js';
 import { allTools, toolMap } from '../src/tools/index.js';
+import { allPrompts, promptMap } from '../src/prompts/index.js';
+import { allResources, resourceMap } from '../src/resources/index.js';
 
 describe('server scaffold', () => {
   it('exposes server info', () => {
@@ -15,14 +17,15 @@ describe('server scaffold', () => {
 });
 
 describe('tool registry', () => {
-  it('registers all 15 tools (Phases 1–4)', () => {
-    expect(allTools.length).toBe(15);
+  it('registers all 16 tools (Phases 1–5)', () => {
+    expect(allTools.length).toBe(16);
   });
 
   it('exposes expected tool names', () => {
     const names = allTools.map((t) => t.definition.name).sort();
     expect(names).toEqual([
       'get_ata_rp',
+      'get_cnpj_data',
       'get_contrato',
       'get_fornecedor_contratos',
       'get_licitacao',
@@ -58,5 +61,47 @@ describe('tool registry', () => {
     for (const t of allTools) {
       expect(toolMap.get(t.definition.name)).toBe(t);
     }
+  });
+});
+
+describe('prompt registry', () => {
+  it('registers 4 prompts', () => {
+    expect(allPrompts.length).toBe(4);
+  });
+
+  it('exposes expected prompt names', () => {
+    const names = allPrompts.map((p) => p.definition.name).sort();
+    expect(names).toEqual([
+      'analyze_edital',
+      'analyze_orgao',
+      'check_supplier',
+      'find_arp_opportunities',
+    ]);
+  });
+
+  it('promptMap is consistent', () => {
+    expect(promptMap.size).toBe(allPrompts.length);
+  });
+});
+
+describe('resource registry', () => {
+  it('registers 2 resources', () => {
+    expect(allResources.length).toBe(2);
+  });
+
+  it('exposes expected URIs', () => {
+    const uris = allResources.map((r) => r.resource.uri).sort();
+    expect(uris).toEqual(['licinexus://scope', 'licitacao://modalidades']);
+  });
+
+  it('resources are readable', async () => {
+    for (const r of allResources) {
+      const result = await r.read();
+      expect(result.contents.length).toBeGreaterThan(0);
+    }
+  });
+
+  it('resourceMap is consistent', () => {
+    expect(resourceMap.size).toBe(allResources.length);
   });
 });

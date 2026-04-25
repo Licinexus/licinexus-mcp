@@ -9,7 +9,7 @@ const ArgsSchema = z.object({
   cnpj: z.string(),
   diasAtras: z.number().int().min(1).max(3650).default(365),
   pagina: z.number().int().min(1).default(1),
-  tamanhoPagina: z.number().int().min(1).max(50).default(50),
+  tamanhoPagina: z.number().int().min(10).max(50).default(50),
 });
 
 export const getFornecedorContratos: ToolDef = {
@@ -29,7 +29,7 @@ export const getFornecedorContratos: ToolDef = {
           description: 'How many days back to search.',
         },
         pagina: { type: 'integer', minimum: 1, default: 1 },
-        tamanhoPagina: { type: 'integer', minimum: 1, maximum: 50, default: 50 },
+        tamanhoPagina: { type: 'integer', minimum: 10, maximum: 50, default: 50 },
       },
       required: ['cnpj'],
     },

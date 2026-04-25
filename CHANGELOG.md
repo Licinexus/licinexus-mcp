@@ -8,6 +8,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Phase 5** — CNPJ enrichment (1 tool), 4 prompts, 2 resources:
+  - `get_cnpj_data` — public Receita Federal data via BrasilAPI (provider swappable)
+  - Prompts: `analyze_edital`, `analyze_orgao`, `find_arp_opportunities`, `check_supplier`
+  - Resources: `licitacao://modalidades`, `licinexus://scope`
+- Smoke test script (`npm run smoke`) hitting real PNCP + BrasilAPI.
+
+### Fixed
+- PNCP `tamanhoPagina` minimum is 10 (server-side requirement); adapter now clamps and tool schemas enforce min 10.
+- `getContratacao` follows PNCP's documented endpoint move from `/api/pncp/v1` to `/api/consulta/v1`.
+- `Ata` schema now matches real API field names (`numeroControlePNCPAta`, `cancelado`, `vigenciaInicio/Fim`).
+- `search_pca` now uses the live `/pca/atualizacao` endpoint with classification filter.
+- All sub-resource list endpoints (itens, resultados, arquivos, termos, instrumentos) treat 404 as empty result, not error.
+- BrasilAPI CNPJ schema accepts both string and object shapes for `porte` and `natureza_juridica`.
+
+### Added (continued)
 - **Phase 4** — Órgãos, Fornecedores, PCA (4 tools):
   - `get_orgao` — agency profile
   - `get_fornecedor_contratos` — public contracts of a CNPJ as supplier

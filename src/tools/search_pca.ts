@@ -1,39 +1,39 @@
 import { z } from 'zod';
-import { listPca, PncpError } from '../adapters/pncp.js';
+import { listPcaAtualizacao, PncpError } from '../adapters/pncp.js';
+import { defaultDateRange, isValidPncpDate } from '../utils/dates.js';
 import type { ToolDef } from './types.js';
 import { errorResult, jsonResult } from './types.js';
 
 const ArgsSchema = z.object({
-  anoPca: z
-    .number()
-    .int()
-    .min(2020)
-    .max(2100)
-    .optional()
-    .describe('Year of the PCA (Plano de Contratação Anual). Defaults to current year.'),
-  cnpjOrgao: z
-    .string()
-    .regex(/^\d{14}$/, 'CNPJ must be 14 digits')
-    .optional(),
+  dataInicio: z.string().refine(isValidPncpDate, 'Format must be YYYYMMDD').optional(),
+  dataFim: z.string().refine(isValidPncpDate, 'Format must be YYYYMMDD').optional(),
+  classificacao: z.enum(['material', 'servico']).default('material'),
   pagina: z.number().int().min(1).default(1),
-  tamanhoPagina: z.number().int().min(1).max(50).default(20),
+  tamanhoPagina: z.number().int().min(10).max(50).default(20),
 });
 
 export const searchPca: ToolDef = {
   definition: {
     name: 'search_pca',
     description:
-      'Search Plano de Contratação Anual (PCA) — what public agencies INTEND to buy this year, per Lei 14.133. Forward-looking signal: tells you upcoming opportunities before they hit the bid stage. One of the most under-used data sources for govtech sales.',
+      "Search recently published/updated Plano de Contratação Anual (PCA) entries — what public agencies INTEND to buy. Returns PCA entries (one per agency unit) with their items embedded. Filter by classification: 'material' or 'servico'. Defaults: last 30 days, classification 'material'. Per Lei 14.133.",
     inputSchema: {
       type: 'object',
       properties: {
-        anoPca: {
-          type: 'integer',
-          description: 'Year of the PCA (e.g. 2025). Defaults to current year.',
+        dataInicio: {
+          type: 'string',
+          description: 'Start date YYYYMMDD. Default: 30 days ago.',
         },
-        cnpjOrgao: { type: 'string', description: 'Filter by procuring agency CNPJ' },
+        dataFim: { type: 'string', description: 'End date YYYYMMDD. Default: today.' },
+        classificacao: {
+          type: 'string',
+          enum: ['material', 'servico'],
+          default: 'material',
+          description:
+            'Top-level classification: material (codigoClassificacaoSuperior=01) or servico (=02).',
+        },
         pagina: { type: 'integer', minimum: 1, default: 1 },
-        tamanhoPagina: { type: 'integer', minimum: 1, maximum: 50, default: 20 },
+        tamanhoPagina: { type: 'integer', minimum: 10, maximum: 50, default: 20 },
       },
     },
   },
@@ -42,17 +42,33 @@ export const searchPca: ToolDef = {
     const parse = ArgsSchema.safeParse(rawArgs ?? {});
     if (!parse.success) return errorResult(`Invalid arguments: ${parse.error.message}`);
     const args = parse.data;
-    const ano = args.anoPca ?? new Date().getFullYear();
+    const range =
+      !args.dataInicio || !args.dataFim
+        ? (() => {
+            const r = defaultDateRange(30);
+            return { dataInicio: r.dataInicial, dataFim: r.dataFinal };
+          })()
+        : { dataInicio: args.dataInicio, dataFim: args.dataFim };
+
     try {
-      const page = await listPca({
-        anoPca: ano,
-        cnpjOrgao: args.cnpjOrgao,
+      const page = await listPcaAtualizacao({
+        dataInicio: range.dataInicio,
+        dataFim: range.dataFim,
+        codigoClassificacaoSuperior: args.classificacao === 'servico' ? '02' : '01',
         pagina: args.pagina,
         tamanhoPagina: args.tamanhoPagina,
       });
       return jsonResult({
-        meta: { anoPca: ano, total: page.data.length, totalPncp: page.totalRegistros },
-        planos: page.data,
+        meta: {
+          dataInicio: range.dataInicio,
+          dataFim: range.dataFim,
+          classificacao: args.classificacao,
+          pagina: args.pagina,
+          totalRetornados: page.data.length,
+          totalPncp: page.totalRegistros,
+          totalPaginas: page.totalPaginas,
+        },
+        results: page.data,
       });
     } catch (err) {
       const msg = err instanceof PncpError ? err.message : String(err);
