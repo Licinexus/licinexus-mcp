@@ -1,12 +1,29 @@
-# @licinexusbr/mcp
+<p align="center">
+  <a href="https://licinexus.com.br">
+    <img src=".github/assets/logo.png" alt="Licinexus" width="380">
+  </a>
+</p>
 
-> Conversational access to Brazilian public procurement data — directly from Claude Desktop, Cursor, Continue, or any MCP-compatible client.
+<h1 align="center">@licinexusbr/mcp</h1>
 
-Maintained by **[Licinexus](https://licinexus.com.br)** as an open-source contribution to the Brazilian govtech ecosystem.
+<p align="center">
+  Conversational access to Brazilian public procurement data — directly from Claude Desktop, Cursor, Continue, or any MCP-compatible client.
+</p>
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![DCO](https://img.shields.io/badge/DCO-required-green.svg)](https://developercertificate.org/)
-[![PNCP](https://img.shields.io/badge/data-PNCP%20%2B%20Receita%20Federal-yellow.svg)](https://pncp.gov.br)
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT"></a>
+  <a href="https://developercertificate.org/"><img src="https://img.shields.io/badge/DCO-required-green.svg" alt="DCO"></a>
+  <a href="https://pncp.gov.br"><img src="https://img.shields.io/badge/data-PNCP%20%2B%20Receita%20Federal-yellow.svg" alt="PNCP + Receita"></a>
+  <a href="https://www.npmjs.com/package/@licinexusbr/mcp"><img src="https://img.shields.io/npm/v/@licinexusbr/mcp.svg?label=npm" alt="npm"></a>
+</p>
+
+<p align="center">
+  Maintained by <a href="https://licinexus.com.br"><b>Licinexus</b></a> as an open-source contribution to the Brazilian govtech ecosystem.
+</p>
+
+<p align="center">
+  <img src=".github/assets/demo.gif" alt="Demo: Claude conversando com licitações via MCP" width="900">
+</p>
 
 ---
 
