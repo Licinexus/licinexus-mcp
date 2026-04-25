@@ -21,9 +21,13 @@
   Maintained by <a href="https://licinexus.com.br"><b>Licinexus</b></a> as an open-source contribution to the Brazilian govtech ecosystem.
 </p>
 
+<!-- BEGIN: hero demo (replace .github/assets/demo-claude.gif before public launch — see scripts/record-claude-gif.md) -->
 <p align="center">
-  <img src=".github/assets/demo.gif" alt="Demo: Claude conversando com licitações via MCP" width="900">
+  <img src=".github/assets/demo.gif" alt="Demo: Licinexus MCP em ação contra PNCP + Receita Federal" width="900">
 </p>
+<!-- END: hero demo -->
+
+> 📺 **Demo above** is a CLI script calling the same adapters the LLM uses, against live PNCP & BrasilAPI. The Claude Desktop / Cursor experience looks identical — same tools, same data, with the LLM doing the natural-language interpretation.
 
 ---
 
