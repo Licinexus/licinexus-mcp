@@ -1,0 +1,38 @@
+name: DCO
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  dco:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify Signed-off-by on all commits
+        run: |
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+
+          MISSING=""
+          while IFS= read -r sha; do
+            if ! git log -1 --format='%B' "$sha" | grep -qE '^Signed-off-by: .+ <.+@.+>'; then
+              SUBJECT=$(git log -1 --format='%s' "$sha")
+              MISSING="${MISSING}  - ${sha:0:7} ${SUBJECT}"$'\n'
+            fi
+          done < <(git log --no-merges --format='%H' "${BASE_SHA}..${HEAD_SHA}")
+
+          if [ -n "$MISSING" ]; then
+            echo "::error::The following commits are missing the Signed-off-by line:"
+            echo "$MISSING"
+            echo ""
+            echo "To fix, amend with: git commit --amend --signoff"
+            echo "Or for multiple commits: git rebase HEAD~N --signoff"
+            echo ""
+            echo "See CONTRIBUTING.md for details."
+            exit 1
+          fi
+          echo "✓ All commits properly signed off"

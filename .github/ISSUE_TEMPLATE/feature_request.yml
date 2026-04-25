@@ -1,0 +1,59 @@
+name: 💡 Feature Request
+description: Suggest a new tool, adapter, or capability
+labels: ['enhancement', 'triage']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the suggestion! A few quick checks before you submit:
+
+        - Is this a feature for **the open-source MCP** (public data only), or a request for the [Licinexus product](https://licinexus.com.br)? This repo is only for the former.
+        - Could this be implemented by composing existing tools and prompts in the LLM client itself, instead of a new server-side feature?
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: Describe the use case. Who benefits and how?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: What should the MCP do? New tool? New filter? New adapter?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: source
+    attributes:
+      label: Data source
+      description: Which public data source would this involve?
+      options:
+        - PNCP (Portal Nacional de Contratações Públicas)
+        - Receita Federal CNPJ (via BrasilAPI)
+        - State TCE (Tribunal de Contas Estadual) — please specify which
+        - ComprasNet legacy
+        - Diário Oficial
+        - Other (please describe)
+        - N/A (internal feature)
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Any workarounds or other approaches?
+
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope check
+      description: Does this fit the project's scope? (raw public data only, no matching/scoring/AI generation, no private data)
+      placeholder: |
+        Yes/No — explain why this stays within the public-data scope.
+    validations:
+      required: true

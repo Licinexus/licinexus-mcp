@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20, 22]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Format check
+        run: npm run format:check
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test
+        run: npm test
+
+      - name: Build
+        run: npm run build
+
+  isolation-check:
+    name: No private imports
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify no imports from private Licinexus packages
+        run: |
+          echo "Scanning for forbidden imports..."
+          if grep -rE "(from\s+['\"]|require\(['\"])(licita-|@licinexus/licita-)" src/ tests/ 2>/dev/null; then
+            echo "::error::Found imports from private Licinexus packages. This MCP must remain fully isolated."
+            exit 1
+          fi
+          echo "✓ No private imports detected"

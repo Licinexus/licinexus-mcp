@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 🛒 Licinexus Product Support
+    url: https://licinexus.com.br/contato
+    about: Questions about the Licinexus paid product (matching, alerts, propostas, gestão) — please contact us directly, not on this repo.
+  - name: 🔒 Security Vulnerability
+    url: https://github.com/Licinexus/licinexus-mcp/blob/main/SECURITY.md
+    about: Found a security issue? Do NOT open a public issue. See SECURITY.md for responsible disclosure.
+  - name: 💬 Discussion / Question
+    url: https://github.com/Licinexus/licinexus-mcp/discussions
+    about: General questions, ideas, or design discussions go in Discussions.

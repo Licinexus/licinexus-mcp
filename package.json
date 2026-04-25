@@ -1,0 +1,71 @@
+{
+  "name": "@licinexus/mcp",
+  "version": "0.0.1",
+  "description": "MCP server for Brazilian public procurement data (PNCP + Receita Federal). Maintained by Licinexus.",
+  "type": "module",
+  "bin": {
+    "licinexus-mcp": "./dist/index.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/index.ts",
+    "start": "node dist/index.js",
+    "lint": "eslint src tests",
+    "format": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\"",
+    "format:check": "prettier --check \"src/**/*.ts\" \"tests/**/*.ts\"",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build && npm test"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "claude",
+    "anthropic",
+    "licitacoes",
+    "pncp",
+    "govtech",
+    "brasil",
+    "open-data",
+    "transparencia"
+  ],
+  "author": "Licinexus <licitacao@licinexus.com.br>",
+  "license": "MIT",
+  "homepage": "https://github.com/Licinexus/licinexus-mcp#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Licinexus/licinexus-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Licinexus/licinexus-mcp/issues"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "axios": "^1.7.9",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "@typescript-eslint/eslint-plugin": "^8.19.1",
+    "@typescript-eslint/parser": "^8.19.1",
+    "eslint": "^9.17.0",
+    "prettier": "^3.4.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -1,0 +1,85 @@
+name: 🐛 Bug Report
+description: Report a bug in @licinexus/mcp
+labels: ['bug', 'triage']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug report!
+
+        ⚠️ **Before submitting:**
+        - This is for bugs in **the MCP server itself**, not the Licinexus product. For product questions, use [licinexus.com.br/contato](https://licinexus.com.br/contato).
+        - For security vulnerabilities, see [SECURITY.md](https://github.com/Licinexus/licinexus-mcp/blob/main/SECURITY.md) — do not file public issues.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug description
+      description: A clear and concise description of what the bug is.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: How can someone else reproduce this?
+      placeholder: |
+        1. Configure MCP in Claude Desktop with...
+        2. Ask Claude to...
+        3. See error...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: Include error messages, stack traces, or screenshots if relevant.
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: '@licinexus/mcp version'
+      placeholder: e.g. 0.0.1
+    validations:
+      required: true
+
+  - type: input
+    id: node
+    attributes:
+      label: Node.js version
+      placeholder: e.g. 20.10.0
+    validations:
+      required: true
+
+  - type: input
+    id: client
+    attributes:
+      label: MCP client
+      placeholder: e.g. Claude Desktop 0.7.2 / Cursor / Continue
+    validations:
+      required: true
+
+  - type: input
+    id: os
+    attributes:
+      label: Operating System
+      placeholder: e.g. macOS 14.5, Windows 11, Ubuntu 22.04
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: Anything else relevant?
