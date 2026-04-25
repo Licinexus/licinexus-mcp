@@ -20,7 +20,7 @@ const ArgsSchema = z.object({
   valorMinimo: z.number().nonnegative().optional(),
   valorMaximo: z.number().nonnegative().optional(),
   pagina: z.number().int().min(1).default(1),
-  tamanhoPagina: z.number().int().min(1).max(50).default(20),
+  tamanhoPagina: z.number().int().min(10).max(50).default(20),
 });
 
 type Args = z.infer<typeof ArgsSchema>;
@@ -114,7 +114,7 @@ export const searchLicitacoes: ToolDef = {
         valorMinimo: { type: 'number', description: 'Minimum estimated value in BRL.' },
         valorMaximo: { type: 'number', description: 'Maximum estimated value in BRL.' },
         pagina: { type: 'integer', minimum: 1, default: 1 },
-        tamanhoPagina: { type: 'integer', minimum: 1, maximum: 50, default: 20 },
+        tamanhoPagina: { type: 'integer', minimum: 10, maximum: 50, default: 20 },
       },
     },
   },

@@ -241,23 +241,32 @@ export type InstrumentoCobranca = z.infer<typeof InstrumentoCobrancaSchema>;
 
 export const AtaSchema = z
   .object({
-    numeroControlePNCP: z.string(),
+    numeroControlePNCPAta: z.string().nullable().optional(),
+    numeroControlePNCP: z.string().nullable().optional(),
     numeroAtaRegistroPreco: z.string().nullable().optional(),
     numeroControlePNCPCompra: z.string().nullable().optional(),
-    anoAta: z.number(),
-    sequencialAta: z.number(),
+    anoAta: z.number().nullable().optional(),
+    sequencialAta: z.number().nullable().optional(),
     objetoContratacao: z.string().nullable().optional(),
     orgaoEntidade: orgaoEntidadeSchema.nullable().optional(),
     unidadeOrgao: unidadeOrgaoSchema.nullable().optional(),
     valorTotalEstimado: z.number().nullable().optional(),
     valorTotalHomologado: z.number().nullable().optional(),
     dataAssinatura: z.string().nullable().optional(),
+    vigenciaInicio: z.string().nullable().optional(),
+    vigenciaFim: z.string().nullable().optional(),
     dataVigenciaInicio: z.string().nullable().optional(),
     dataVigenciaFim: z.string().nullable().optional(),
     dataPublicacaoPncp: z.string().nullable().optional(),
+    dataInclusao: z.string().nullable().optional(),
+    dataAtualizacao: z.string().nullable().optional(),
+    dataAtualizacaoGlobal: z.string().nullable().optional(),
+    cancelado: z.boolean().nullable().optional(),
     cancelada: z.boolean().nullable().optional(),
+    dataCancelamento: z.string().nullable().optional(),
     situacaoAtaId: z.number().nullable().optional(),
     situacaoAtaNome: z.string().nullable().optional(),
+    usuario: z.string().nullable().optional(),
   })
   .passthrough();
 
@@ -346,12 +355,20 @@ export type PcaItem = z.infer<typeof PcaItemSchema>;
 export const PcaSchema = z
   .object({
     orgaoCnpj: z.string().nullable().optional(),
+    orgaoEntidadeCnpj: z.string().nullable().optional(),
     orgaoRazaoSocial: z.string().nullable().optional(),
-    anoPca: z.number(),
+    orgaoEntidadeRazaoSocial: z.string().nullable().optional(),
+    anoPca: z.number().nullable().optional(),
     sequencialPca: z.number().nullable().optional(),
+    idPcaPncp: z.union([z.string(), z.number()]).nullable().optional(),
+    codigoUnidade: z.string().nullable().optional(),
+    nomeUnidade: z.string().nullable().optional(),
     valorTotalEstimadoAno: z.number().nullable().optional(),
     quantidadeItensPca: z.number().nullable().optional(),
     dataPublicacaoPncp: z.string().nullable().optional(),
+    dataPublicacaoPNCP: z.string().nullable().optional(),
+    dataAtualizacaoGlobalPCA: z.string().nullable().optional(),
+    itens: z.array(z.unknown()).nullable().optional(),
   })
   .passthrough();
 

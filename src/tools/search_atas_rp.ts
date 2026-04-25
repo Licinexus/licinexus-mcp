@@ -15,18 +15,19 @@ const ArgsSchema = z.object({
   somenteVigentes: z.boolean().default(true),
   palavraChave: z.string().min(2).optional(),
   pagina: z.number().int().min(1).default(1),
-  tamanhoPagina: z.number().int().min(1).max(50).default(20),
+  tamanhoPagina: z.number().int().min(10).max(50).default(20),
 });
 
 function isVigente(a: Ata, today: Date = new Date()): boolean {
-  if (a.cancelada) return false;
-  if (!a.dataVigenciaFim) return true;
-  return new Date(a.dataVigenciaFim) >= today;
+  if (a.cancelado === true || a.cancelada === true) return false;
+  const fim = a.vigenciaFim ?? a.dataVigenciaFim;
+  if (!fim) return true;
+  return new Date(fim) >= today;
 }
 
 function summarize(a: Ata) {
   return {
-    numeroControlePNCP: a.numeroControlePNCP,
+    numeroControlePNCPAta: a.numeroControlePNCPAta ?? a.numeroControlePNCP,
     numeroAta: a.numeroAtaRegistroPreco,
     objeto: a.objetoContratacao,
     valorEstimado: a.valorTotalEstimado,
@@ -36,9 +37,9 @@ function summarize(a: Ata) {
     uf: a.unidadeOrgao?.ufSigla,
     municipio: a.unidadeOrgao?.municipioNome,
     dataAssinatura: a.dataAssinatura,
-    vigenciaInicio: a.dataVigenciaInicio,
-    vigenciaFim: a.dataVigenciaFim,
-    cancelada: a.cancelada,
+    vigenciaInicio: a.vigenciaInicio ?? a.dataVigenciaInicio,
+    vigenciaFim: a.vigenciaFim ?? a.dataVigenciaFim,
+    cancelado: a.cancelado ?? a.cancelada,
     situacao: a.situacaoAtaNome,
   };
 }
@@ -62,7 +63,7 @@ export const searchAtasRp: ToolDef = {
         },
         palavraChave: { type: 'string', description: 'Keyword filter on objetoContratacao' },
         pagina: { type: 'integer', minimum: 1, default: 1 },
-        tamanhoPagina: { type: 'integer', minimum: 1, maximum: 50, default: 20 },
+        tamanhoPagina: { type: 'integer', minimum: 10, maximum: 50, default: 20 },
       },
     },
   },

@@ -46,7 +46,8 @@ Then configure your MCP client (Claude Desktop example):
 - [x] **Phase 2** — Contratos + Termos Aditivos + Instrumentos de Cobrança: 4 tools
 - [x] **Phase 3** — Atas de Registro de Preço + saldos: 2 tools
 - [x] **Phase 4** — Órgãos + Fornecedores + PCA: 4 tools
-- [ ] **Phase 5** — CNPJ enrichment via BrasilAPI + prompts prontos
+- [x] **Phase 5** — CNPJ via BrasilAPI + 4 prompts + 2 resources
+- [x] **Smoke test** — 15/15 endpoints validated against real PNCP & BrasilAPI
 - [ ] **Phase 6** — Public launch
 
 ### Tools available (15)

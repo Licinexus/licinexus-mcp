@@ -39,6 +39,11 @@ const PNCP_BASE = 'https://pncp.gov.br/api/pncp/v1';
 
 const REQUEST_TIMEOUT_MS = 20_000;
 const MAX_PAGE_SIZE = 50;
+const MIN_PAGE_SIZE = 10; // PNCP requires tamanhoPagina >= 10
+
+function clampPageSize(n: number | undefined): number {
+  return Math.min(Math.max(n ?? 20, MIN_PAGE_SIZE), MAX_PAGE_SIZE);
+}
 
 const consultaClient: AxiosInstance = axios.create({
   baseURL: CONSULTA_BASE,
@@ -79,6 +84,16 @@ async function withRetry<T>(fn: () => Promise<T>, attempts = 3): Promise<T> {
   throw lastError;
 }
 
+function asArray(data: unknown): unknown[] {
+  if (Array.isArray(data)) return data;
+  if (data && typeof data === 'object' && 'data' in (data as Record<string, unknown>)) {
+    const inner = (data as Record<string, unknown>).data;
+    if (Array.isArray(inner)) return inner;
+  }
+  if (data === '' || data == null) return [];
+  return [];
+}
+
 function describeAxiosError(err: AxiosError): string {
   const status = err.response?.status;
   const url = err.config?.url ?? '?';
@@ -113,7 +128,7 @@ export interface ListContratacoesParams {
 }
 
 export async function listContratacoes(params: ListContratacoesParams): Promise<ContratacoesPage> {
-  const tamanhoPagina = Math.min(params.tamanhoPagina ?? 20, MAX_PAGE_SIZE);
+  const tamanhoPagina = clampPageSize(params.tamanhoPagina);
   const pagina = Math.max(params.pagina ?? 1, 1);
   const query = { ...params, pagina, tamanhoPagina };
   const cacheKey = `list:contratacoes:${JSON.stringify(query)}`;
@@ -145,8 +160,9 @@ export async function getContratacao(
   if (cached) return cached;
 
   try {
+    // PNCP moved this detail endpoint from /api/pncp/v1 to /api/consulta/v1
     const { data } = await withRetry(() =>
-      pncpClient.get(`/orgaos/${orgaoCnpj}/compras/${ano}/${sequencial}`),
+      consultaClient.get(`/orgaos/${orgaoCnpj}/compras/${ano}/${sequencial}`),
     );
     const parsed = ContratacaoSchema.parse(data);
     cache.set(cacheKey, parsed, TTL_30_MIN);
@@ -172,12 +188,13 @@ export async function listContratacaoItens(
     const { data } = await withRetry(() =>
       pncpClient.get(`/orgaos/${orgaoCnpj}/compras/${ano}/${sequencial}/itens`),
     );
-    const arr = Array.isArray(data) ? data : (data?.data ?? []);
+    const arr = asArray(data);
     const parsed = ItemContratacaoSchema.array().parse(arr);
     cache.set(cacheKey, parsed, TTL_30_MIN);
     return parsed;
   } catch (err) {
     if (err instanceof AxiosError) {
+      if (err.response?.status === 404) return [];
       throw new PncpError(describeAxiosError(err), err);
     }
     throw err;
@@ -200,12 +217,13 @@ export async function listItemResultados(
         `/orgaos/${orgaoCnpj}/compras/${ano}/${sequencial}/itens/${numeroItem}/resultados`,
       ),
     );
-    const arr = Array.isArray(data) ? data : (data?.data ?? []);
+    const arr = asArray(data);
     const parsed = ResultadoItemSchema.array().parse(arr);
     cache.set(cacheKey, parsed, TTL_30_MIN);
     return parsed;
   } catch (err) {
     if (err instanceof AxiosError) {
+      if (err.response?.status === 404) return [];
       throw new PncpError(describeAxiosError(err), err);
     }
     throw err;
@@ -225,12 +243,13 @@ export async function listContratacaoArquivos(
     const { data } = await withRetry(() =>
       pncpClient.get(`/orgaos/${orgaoCnpj}/compras/${ano}/${sequencial}/arquivos`),
     );
-    const arr = Array.isArray(data) ? data : (data?.data ?? []);
+    const arr = asArray(data);
     const parsed = ArquivoSchema.array().parse(arr);
     cache.set(cacheKey, parsed, TTL_30_MIN);
     return parsed;
   } catch (err) {
     if (err instanceof AxiosError) {
+      if (err.response?.status === 404) return [];
       throw new PncpError(describeAxiosError(err), err);
     }
     throw err;
@@ -249,7 +268,7 @@ export interface ListContratosParams {
 }
 
 export async function listContratos(params: ListContratosParams): Promise<ContratosPage> {
-  const tamanhoPagina = Math.min(params.tamanhoPagina ?? 20, MAX_PAGE_SIZE);
+  const tamanhoPagina = clampPageSize(params.tamanhoPagina);
   const pagina = Math.max(params.pagina ?? 1, 1);
   const query: Record<string, unknown> = { pagina, tamanhoPagina };
   if (params.dataInicial) query.dataInicial = params.dataInicial;
@@ -311,12 +330,13 @@ export async function listContratoTermos(
     const { data } = await withRetry(() =>
       pncpClient.get(`/orgaos/${orgaoCnpj}/contratos/${ano}/${sequencial}/termos`),
     );
-    const arr = Array.isArray(data) ? data : (data?.data ?? []);
+    const arr = asArray(data);
     const parsed = TermoContratoSchema.array().parse(arr);
     cache.set(cacheKey, parsed, TTL_30_MIN);
     return parsed;
   } catch (err) {
     if (err instanceof AxiosError) {
+      if (err.response?.status === 404) return [];
       throw new PncpError(describeAxiosError(err), err);
     }
     throw err;
@@ -336,12 +356,13 @@ export async function listContratoInstrumentos(
     const { data } = await withRetry(() =>
       pncpClient.get(`/orgaos/${orgaoCnpj}/contratos/${ano}/${sequencial}/instrumentocobranca`),
     );
-    const arr = Array.isArray(data) ? data : (data?.data ?? []);
+    const arr = asArray(data);
     const parsed = InstrumentoCobrancaSchema.array().parse(arr);
     cache.set(cacheKey, parsed, TTL_30_MIN);
     return parsed;
   } catch (err) {
     if (err instanceof AxiosError) {
+      if (err.response?.status === 404) return [];
       throw new PncpError(describeAxiosError(err), err);
     }
     throw err;
@@ -359,7 +380,7 @@ export interface ListAtasParams {
 }
 
 export async function listAtas(params: ListAtasParams): Promise<AtasPage> {
-  const tamanhoPagina = Math.min(params.tamanhoPagina ?? 20, MAX_PAGE_SIZE);
+  const tamanhoPagina = clampPageSize(params.tamanhoPagina);
   const pagina = Math.max(params.pagina ?? 1, 1);
   const query: Record<string, unknown> = { pagina, tamanhoPagina };
   if (params.dataInicial) query.dataInicial = params.dataInicial;
@@ -426,12 +447,13 @@ export async function listAtaItens(
         `/orgaos/${orgaoCnpj}/compras/${anoCompra}/${sequencialCompra}/atas/${sequencialAta}/itens`,
       ),
     );
-    const arr = Array.isArray(data) ? data : (data?.data ?? []);
+    const arr = asArray(data);
     const parsed = ItemAtaSchema.array().parse(arr);
     cache.set(cacheKey, parsed, TTL_30_MIN);
     return parsed;
   } catch (err) {
     if (err instanceof AxiosError) {
+      if (err.response?.status === 404) return [];
       throw new PncpError(describeAxiosError(err), err);
     }
     throw err;
@@ -454,12 +476,13 @@ export async function listAtaArquivos(
         `/orgaos/${orgaoCnpj}/compras/${anoCompra}/${sequencialCompra}/atas/${sequencialAta}/arquivos`,
       ),
     );
-    const arr = Array.isArray(data) ? data : (data?.data ?? []);
+    const arr = asArray(data);
     const parsed = ArquivoSchema.array().parse(arr);
     cache.set(cacheKey, parsed, TTL_30_MIN);
     return parsed;
   } catch (err) {
     if (err instanceof AxiosError) {
+      if (err.response?.status === 404) return [];
       throw new PncpError(describeAxiosError(err), err);
     }
     throw err;
@@ -488,26 +511,32 @@ export async function getOrgao(cnpj: string): Promise<Orgao> {
 
 // ── PCA (Plano de Contratação Anual) ─────────────────────────────────────────
 
-export interface ListPcaParams {
-  anoPca?: number;
-  cnpjOrgao?: string;
+export interface ListPcaAtualizacaoParams {
+  dataInicio: string;
+  dataFim: string;
+  codigoClassificacaoSuperior?: string;
   pagina?: number;
   tamanhoPagina?: number;
 }
 
-export async function listPca(params: ListPcaParams): Promise<PcaPage> {
-  const tamanhoPagina = Math.min(params.tamanhoPagina ?? 20, MAX_PAGE_SIZE);
+export async function listPcaAtualizacao(params: ListPcaAtualizacaoParams): Promise<PcaPage> {
+  const tamanhoPagina = clampPageSize(params.tamanhoPagina);
   const pagina = Math.max(params.pagina ?? 1, 1);
-  const query: Record<string, unknown> = { pagina, tamanhoPagina };
-  if (params.anoPca) query.anoPca = params.anoPca;
-  if (params.cnpjOrgao) query.cnpjOrgao = params.cnpjOrgao;
-
-  const cacheKey = `list:pca:${JSON.stringify(query)}`;
+  const query = {
+    dataInicio: params.dataInicio,
+    dataFim: params.dataFim,
+    codigoClassificacaoSuperior: params.codigoClassificacaoSuperior ?? '01',
+    pagina,
+    tamanhoPagina,
+  };
+  const cacheKey = `list:pca-atualizacao:${JSON.stringify(query)}`;
   const cached = cache.get<PcaPage>(cacheKey);
   if (cached) return cached;
 
   try {
-    const { data } = await withRetry(() => consultaClient.get('/pca/', { params: query }));
+    const { data } = await withRetry(() =>
+      consultaClient.get('/pca/atualizacao', { params: query }),
+    );
     const parsed = PcaPageSchema.parse(data);
     cache.set(cacheKey, parsed, TTL_5_MIN);
     return parsed;
@@ -532,12 +561,13 @@ export async function listPcaItens(
     const { data } = await withRetry(() =>
       pncpClient.get(`/orgaos/${orgaoCnpj}/pca/${anoPca}/${sequencialPca}/itens`),
     );
-    const arr = Array.isArray(data) ? data : (data?.data ?? []);
+    const arr = asArray(data);
     const parsed = PcaItemSchema.array().parse(arr);
     cache.set(cacheKey, parsed, TTL_30_MIN);
     return parsed;
   } catch (err) {
     if (err instanceof AxiosError) {
+      if (err.response?.status === 404) return [];
       throw new PncpError(describeAxiosError(err), err);
     }
     throw err;

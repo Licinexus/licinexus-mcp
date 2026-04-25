@@ -14,6 +14,7 @@ import { getOrgaoTool } from './get_orgao.js';
 import { getFornecedorContratos } from './get_fornecedor_contratos.js';
 import { searchPca } from './search_pca.js';
 import { listPcaItensTool } from './list_pca_itens.js';
+import { getCnpjDataTool } from './get_cnpj_data.js';
 
 export const allTools: ToolDef[] = [
   // Compras / Licitações
@@ -36,6 +37,8 @@ export const allTools: ToolDef[] = [
   // PCA
   searchPca,
   listPcaItensTool,
+  // CNPJ enrichment
+  getCnpjDataTool,
 ];
 
 export const toolMap = new Map<string, ToolDef>(allTools.map((t) => [t.definition.name, t]));
