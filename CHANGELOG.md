@@ -8,6 +8,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Phase 4** — Órgãos, Fornecedores, PCA (4 tools):
+  - `get_orgao` — agency profile
+  - `get_fornecedor_contratos` — public contracts of a CNPJ as supplier
+  - `search_pca` — Plano de Contratação Anual (forward-looking spend signal)
+  - `list_pca_itens` — items planned by an agency for a given year
+- **Phase 3** — Atas de Registro de Preço (2 tools):
+  - `search_atas_rp` — search ARPs, filter to active only by default
+  - `get_ata_rp` — full ARP details + items + arquivos in one shot
+- **Phase 2** — Contratos + Termos + Instrumentos (4 tools):
+  - `search_contratos` — by date range, agency CNPJ, supplier CNPJ, value
+  - `get_contrato` — full contract details
+  - `list_contrato_termos` — additive terms (extensions, value changes)
+  - `list_contrato_instrumentos` — billing instruments (NFes, faturas)
 - **Phase 1** — PNCP adapter and 5 tools for `compras/licitações`:
   - `search_licitacoes` — query by date, modality, UF, CNPJ, value, keyword
   - `get_licitacao` — fetch single bid by PNCP control number or components

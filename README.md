@@ -43,21 +43,44 @@ Then configure your MCP client (Claude Desktop example):
 
 - [x] **Phase 0** — Scaffold, governance, CI
 - [x] **Phase 1** — PNCP search/get for licitações (compras): 5 tools
-- [ ] **Phase 2** — Contratos + Termos Aditivos + Instrumentos de Cobrança
-- [ ] **Phase 3** — Atas de Registro de Preço + saldos
-- [ ] **Phase 4** — Órgãos + Fornecedores + PCA
+- [x] **Phase 2** — Contratos + Termos Aditivos + Instrumentos de Cobrança: 4 tools
+- [x] **Phase 3** — Atas de Registro de Preço + saldos: 2 tools
+- [x] **Phase 4** — Órgãos + Fornecedores + PCA: 4 tools
 - [ ] **Phase 5** — CNPJ enrichment via BrasilAPI + prompts prontos
 - [ ] **Phase 6** — Public launch
 
-### Phase 1 — Tools available
+### Tools available (15)
 
+**Compras / Licitações**
 | Tool | Description |
 | --- | --- |
-| `search_licitacoes` | Search bids by date range, modality, UF, agency CNPJ, value, keyword |
-| `get_licitacao` | Full details of a single bid by PNCP control number |
-| `list_licitacao_itens` | Items (lots) of a bid: descriptions, quantities, estimated values |
-| `list_licitacao_resultados` | Bidding results per item: winners, runners-up, prices, suppliers |
-| `list_licitacao_arquivos` | Edital files (PDFs, attachments, terms of reference) |
+| `search_licitacoes` | Search bids by date, modality, UF, agency CNPJ, value, keyword |
+| `get_licitacao` | Full details of a bid by PNCP control number |
+| `list_licitacao_itens` | Items (lots) of a bid |
+| `list_licitacao_resultados` | Bidding results per item (winners, prices) |
+| `list_licitacao_arquivos` | Edital files (PDFs, attachments) |
+
+**Contratos**
+| Tool | Description |
+| --- | --- |
+| `search_contratos` | Search contracts by date, agency, supplier, value |
+| `get_contrato` | Full contract details |
+| `list_contrato_termos` | Additive terms (extensions, value changes) |
+| `list_contrato_instrumentos` | Billing instruments (NFes, faturas) |
+
+**Atas de Registro de Preço**
+| Tool | Description |
+| --- | --- |
+| `search_atas_rp` | Search ARPs (active only by default) |
+| `get_ata_rp` | Full ARP details + items + files in one call |
+
+**Órgãos / Fornecedores / PCA**
+| Tool | Description |
+| --- | --- |
+| `get_orgao` | Public agency profile (poder, esfera, juridical nature) |
+| `get_fornecedor_contratos` | Public contracts of a CNPJ as supplier |
+| `search_pca` | Plano de Contratação Anual (forward-looking spend) |
+| `list_pca_itens` | Planned items of a specific PCA |
 
 ## Scope
 

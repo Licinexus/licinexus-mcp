@@ -15,18 +15,28 @@ describe('server scaffold', () => {
 });
 
 describe('tool registry', () => {
-  it('registers all 5 Phase 1 tools', () => {
-    expect(allTools.length).toBe(5);
+  it('registers all 15 tools (Phases 1–4)', () => {
+    expect(allTools.length).toBe(15);
   });
 
   it('exposes expected tool names', () => {
     const names = allTools.map((t) => t.definition.name).sort();
     expect(names).toEqual([
+      'get_ata_rp',
+      'get_contrato',
+      'get_fornecedor_contratos',
       'get_licitacao',
+      'get_orgao',
+      'list_contrato_instrumentos',
+      'list_contrato_termos',
       'list_licitacao_arquivos',
       'list_licitacao_itens',
       'list_licitacao_resultados',
+      'list_pca_itens',
+      'search_atas_rp',
+      'search_contratos',
       'search_licitacoes',
+      'search_pca',
     ]);
   });
 
@@ -36,6 +46,11 @@ describe('tool registry', () => {
       expect(t.definition.inputSchema).toBeDefined();
       expect(t.definition.inputSchema.type).toBe('object');
     }
+  });
+
+  it('every tool name is unique', () => {
+    const names = allTools.map((t) => t.definition.name);
+    expect(new Set(names).size).toBe(names.length);
   });
 
   it('toolMap is consistent with allTools', () => {
