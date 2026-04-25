@@ -1,5 +1,5 @@
 name: 🐛 Bug Report
-description: Report a bug in @licinexus/mcp
+description: Report a bug in @licinexusbr/mcp
 labels: ['bug', 'triage']
 body:
   - type: markdown
@@ -49,7 +49,7 @@ body:
   - type: input
     id: version
     attributes:
-      label: '@licinexus/mcp version'
+      label: '@licinexusbr/mcp version'
       placeholder: e.g. 0.0.1
     validations:
       required: true

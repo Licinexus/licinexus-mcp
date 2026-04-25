@@ -24,6 +24,7 @@ export default [
               group: [
                 'licita-*',
                 '@licinexus/licita-*',
+                '@licinexusbr/licita-*',
                 '**/licita-core/**',
                 '**/licita-api/**',
                 '**/licita-match/**',

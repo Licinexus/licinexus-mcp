@@ -2,7 +2,7 @@
 
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability in `@licinexus/mcp`, please **do not open a public issue**.
+If you discover a security vulnerability in `@licinexusbr/mcp`, please **do not open a public issue**.
 
 Instead, email **licitacao@licinexus.com.br** with:
 
@@ -23,7 +23,7 @@ We follow [responsible disclosure](https://en.wikipedia.org/wiki/Coordinated_vul
 
 In scope:
 
-- Vulnerabilities in `@licinexus/mcp` source code published in this repository.
+- Vulnerabilities in `@licinexusbr/mcp` source code published in this repository.
 - Issues that could lead to RCE, data exfiltration, or denial of service in user environments running the MCP locally.
 
 Out of scope:
@@ -40,6 +40,6 @@ Out of scope:
 
 ## Security Best Practices for Users
 
-- Always install from npm (`@licinexus/mcp`) or the official GitHub release — never from forks you don't trust.
-- Keep your install up to date (`npm update @licinexus/mcp`).
+- Always install from npm (`@licinexusbr/mcp`) or the official GitHub release — never from forks you don't trust.
+- Keep your install up to date (`npm update @licinexusbr/mcp`).
 - This MCP makes outbound HTTPS requests to public Brazilian government APIs. It does not transmit any data to Licinexus servers.

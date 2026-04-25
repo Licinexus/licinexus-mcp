@@ -1,4 +1,4 @@
-# @licinexus/mcp
+# @licinexusbr/mcp
 
 > **Status: 🚧 Early development (v0.0.1)** — scaffolding only, no tools implemented yet. Watch this repo for the MVP release.
 
@@ -23,7 +23,7 @@ Brazil's public procurement data is fully public via [PNCP](https://pncp.gov.br)
 
 ```bash
 # coming soon
-npx @licinexus/mcp
+npx @licinexusbr/mcp
 ```
 
 Then configure your MCP client (Claude Desktop example):
@@ -33,7 +33,7 @@ Then configure your MCP client (Claude Desktop example):
   "mcpServers": {
     "licinexus": {
       "command": "npx",
-      "args": ["-y", "@licinexus/mcp"]
+      "args": ["-y", "@licinexusbr/mcp"]
     }
   }
 }

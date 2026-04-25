@@ -1,4 +1,4 @@
-# Contributing to @licinexus/mcp
+# Contributing to @licinexusbr/mcp
 
 Thanks for considering a contribution! A few rules to keep this project healthy.
 

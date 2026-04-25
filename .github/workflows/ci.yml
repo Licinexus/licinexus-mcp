@@ -48,7 +48,7 @@ jobs:
       - name: Verify no imports from private Licinexus packages
         run: |
           echo "Scanning for forbidden imports..."
-          if grep -rE "(from\s+['\"]|require\(['\"])(licita-|@licinexus/licita-)" src/ tests/ 2>/dev/null; then
+          if grep -rE "(from\s+['\"]|require\(['\"])(licita-|@licinexus/licita-|@licinexusbr/licita-)" src/ tests/ 2>/dev/null; then
             echo "::error::Found imports from private Licinexus packages. This MCP must remain fully isolated."
             exit 1
           fi

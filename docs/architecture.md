@@ -6,7 +6,7 @@ This MCP server is open-source, but the broader [Licinexus](https://licinexus.co
 
 ```
 ┌─────────────────────────────────┐
-│  @licinexus/mcp (this repo)     │──► PNCP, BrasilAPI (HTTPS, public)
+│  @licinexusbr/mcp (this repo)   │──► PNCP, BrasilAPI (HTTPS, public)
 │  • MIT licensed                 │
 │  • Public, anyone can fork      │
 └─────────────────────────────────┘
@@ -42,7 +42,7 @@ The user gets a list of bids; the user does not get "which 3 to bid on with what
 ### Wall 3 — Branding & licensing
 
 - License: **MIT** — anyone can use, fork, sublicense.
-- Package scope: `@licinexus/*` on npm — the scope is owned by Licinexus and cannot be squatted.
+- Package scope: `@licinexusbr/*` on npm — the scope is owned by Licinexus and cannot be squatted.
 - Every server response carries `serverInfo.name = "licinexus-mcp"` and credits the project to Licinexus.
 
 This means the MCP can be remixed freely (good for adoption), but the brand association is permanent (good for authority/funnel).
