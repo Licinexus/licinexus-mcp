@@ -1,6 +1,6 @@
 {
   "name": "@licinexusbr/mcp",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "MCP server for Brazilian public procurement data (PNCP + Receita Federal). Maintained by Licinexus.",
   "type": "module",
   "bin": {

@@ -1,32 +1,36 @@
 # @licinexusbr/mcp
 
-> **Status: 🚧 Early development (v0.0.1)** — scaffolding only, no tools implemented yet. Watch this repo for the MVP release.
+> Conversational access to Brazilian public procurement data — directly from Claude Desktop, Cursor, Continue, or any MCP-compatible client.
 
-Conversational access to Brazilian public procurement data (PNCP + Receita Federal) via the [Model Context Protocol](https://modelcontextprotocol.io). Maintained by [Licinexus](https://licinexus.com.br).
+Maintained by **[Licinexus](https://licinexus.com.br)** as an open-source contribution to the Brazilian govtech ecosystem.
 
-Talk to 200k+ Brazilian public bids, contracts, price-registry agreements (atas RP), planning records (PCA) and supplier data — directly from Claude Desktop, Cursor, Continue, or any MCP-compatible client.
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![DCO](https://img.shields.io/badge/DCO-required-green.svg)](https://developercertificate.org/)
+[![PNCP](https://img.shields.io/badge/data-PNCP%20%2B%20Receita%20Federal-yellow.svg)](https://pncp.gov.br)
 
 ---
 
-## Why
+## What it does
 
-Brazil's public procurement data is fully public via [PNCP](https://pncp.gov.br) and the Receita Federal CNPJ datasets, but the APIs are awkward to consume from an LLM. This MCP wraps the most useful endpoints with sensible filters, pagination, and Zod-validated schemas so an assistant can answer questions like:
+Wraps the most useful endpoints of the **Portal Nacional de Contratações Públicas (PNCP)** and **Receita Federal CNPJ** data so an LLM can answer real questions about Brazilian public procurement:
 
-- *"Quais editais de TI no Sudeste com valor acima de R$ 500k publicados nos últimos 7 dias?"*
+- *"Quais editais de TI no Sudeste publicados nos últimos 7 dias com valor acima de R$ 500k?"*
 - *"Existe ata de registro de preço vigente com saldo para `notebook` no estado de SP?"*
-- *"Qual o histórico de contratos do CNPJ X com órgãos públicos federais?"*
+- *"Qual o histórico de contratos do CNPJ X com órgãos públicos federais nos últimos 2 anos?"*
 - *"O que a Prefeitura de Y planeja comprar este ano segundo o PCA?"*
+- *"Resuma este edital e me dê um checklist de viabilidade."*
 
 ## Install
 
-> **Not yet published to npm.** When v0.1.0 ships, install will be:
-
 ```bash
-# coming soon
 npx @licinexusbr/mcp
 ```
 
-Then configure your MCP client (Claude Desktop example):
+That's it — no compilation, no database setup, no auth tokens. The server hits public APIs directly.
+
+### Configuration
+
+**Claude Desktop** — add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
 
 ```json
 {
@@ -39,77 +43,127 @@ Then configure your MCP client (Claude Desktop example):
 }
 ```
 
-## Roadmap
+**Cursor / Continue / other MCP clients** — same shape, see your client's docs for the config file location.
 
-- [x] **Phase 0** — Scaffold, governance, CI
-- [x] **Phase 1** — PNCP search/get for licitações (compras): 5 tools
-- [x] **Phase 2** — Contratos + Termos Aditivos + Instrumentos de Cobrança: 4 tools
-- [x] **Phase 3** — Atas de Registro de Preço + saldos: 2 tools
-- [x] **Phase 4** — Órgãos + Fornecedores + PCA: 4 tools
-- [x] **Phase 5** — CNPJ via BrasilAPI + 4 prompts + 2 resources
-- [x] **Smoke test** — 15/15 endpoints validated against real PNCP & BrasilAPI
-- [ ] **Phase 6** — Public launch
+Restart your MCP client. The 16 tools and 4 prompts will be available.
 
-### Tools available (15)
+## Tools (16)
 
-**Compras / Licitações**
-| Tool | Description |
+### Compras / Licitações
+| Tool | What it does |
 | --- | --- |
 | `search_licitacoes` | Search bids by date, modality, UF, agency CNPJ, value, keyword |
 | `get_licitacao` | Full details of a bid by PNCP control number |
-| `list_licitacao_itens` | Items (lots) of a bid |
-| `list_licitacao_resultados` | Bidding results per item (winners, prices) |
-| `list_licitacao_arquivos` | Edital files (PDFs, attachments) |
+| `list_licitacao_itens` | Items (lots) of a bid: descriptions, quantities, values |
+| `list_licitacao_resultados` | Bidding results per item: winners, prices, suppliers |
+| `list_licitacao_arquivos` | Edital files (PDFs, attachments, terms of reference) |
 
-**Contratos**
-| Tool | Description |
+### Contratos
+| Tool | What it does |
 | --- | --- |
 | `search_contratos` | Search contracts by date, agency, supplier, value |
 | `get_contrato` | Full contract details |
-| `list_contrato_termos` | Additive terms (extensions, value changes) |
+| `list_contrato_termos` | Additive terms (extensions, value/term changes) |
 | `list_contrato_instrumentos` | Billing instruments (NFes, faturas) |
 
-**Atas de Registro de Preço**
-| Tool | Description |
+### Atas de Registro de Preço
+| Tool | What it does |
 | --- | --- |
-| `search_atas_rp` | Search ARPs (active only by default) |
-| `get_ata_rp` | Full ARP details + items + files in one call |
+| `search_atas_rp` | Search ARPs — active only by default. Find usable contracts. |
+| `get_ata_rp` | Full ARP details + items (with available balance) + files |
 
-**Órgãos / Fornecedores / PCA**
-| Tool | Description |
+### Órgãos / Fornecedores / PCA
+| Tool | What it does |
 | --- | --- |
 | `get_orgao` | Public agency profile (poder, esfera, juridical nature) |
 | `get_fornecedor_contratos` | Public contracts of a CNPJ as supplier |
-| `search_pca` | Plano de Contratação Anual (forward-looking spend) |
+| `search_pca` | Plano de Contratação Anual — forward-looking spend signal |
 | `list_pca_itens` | Planned items of a specific PCA |
+
+### CNPJ enrichment
+| Tool | What it does |
+| --- | --- |
+| `get_cnpj_data` | Receita Federal cadastro (CNAEs, sócios, capital, situação) via [BrasilAPI](https://brasilapi.com.br) (default) or MinhaReceita (`CNPJ_PROVIDER=minhareceita`) |
+
+## Prompt templates (4)
+
+Pre-built workflows your assistant can invoke directly:
+
+| Prompt | What it does |
+| --- | --- |
+| `analyze_edital` | Viability checklist for a public bid |
+| `analyze_orgao` | 360° profile of a public agency |
+| `find_arp_opportunities` | Find active ARPs with available balance for a keyword |
+| `check_supplier` | Basic public-data check on a supplier CNPJ |
+
+## Resources (2)
+
+| URI | Content |
+| --- | --- |
+| `licitacao://modalidades` | PNCP modality reference table (Lei 14.133) |
+| `licinexus://scope` | What this MCP does and does not do |
+
+## Example session
+
+```
+You:    Tem alguma ata de registro de preço vigente para notebooks?
+Claude: [calls search_atas_rp with palavraChave="notebook", somenteVigentes=true]
+        Encontrei 12 atas vigentes mencionando notebooks. As 3 mais relevantes:
+        1. Ministério da Justiça — vigência até 2026-12-31, valor estimado R$ 2.4M
+        2. Prefeitura de São Paulo — vigência até 2026-09-30...
+
+You:    Detalhes da primeira, com saldos por item?
+Claude: [calls get_ata_rp includeItens=true]
+        - Item 1: Notebook tipo I (16GB RAM, 512GB SSD) — saldo 1.200 unid, R$ 4.800/un
+        - Item 2: Notebook tipo II ...
+```
+
+## Roadmap
+
+- [x] Phase 0 — Scaffold, governance, CI
+- [x] Phase 1 — Licitações (5 tools)
+- [x] Phase 2 — Contratos + Aditivos + NFes (4 tools)
+- [x] Phase 3 — Atas RP (2 tools)
+- [x] Phase 4 — Órgãos + Fornecedores + PCA (4 tools)
+- [x] Phase 5 — CNPJ + 4 prompts + 2 resources (1 tool)
+- [x] Smoke test against real APIs (15/15 endpoints)
+- [ ] Phase 6 — Public launch (Show HN, Discord, awesome-lists)
 
 ## Scope
 
-### ✅ What this MCP does
-- Wraps **public** Brazilian government APIs (PNCP, BrasilAPI for CNPJ).
+### What this MCP does
+- Wraps **public** Brazilian government APIs (PNCP, BrasilAPI).
 - Returns raw structured data — the LLM does the analysis.
-- Caches read-heavy responses locally (SQLite, per user, short TTL).
+- Caches read-heavy responses locally (in-memory LRU, short TTL).
 
-### ❌ What this MCP does NOT do
-- It does **not** call any private Licinexus infrastructure or database.
-- It does **not** include the Licinexus matching engine, supplier scoring, price aggregation, generated artifacts, or any proprietary data.
-- It is **not** a replacement for the [Licinexus](https://licinexus.com.br) product — it's a complementary open-source tool for accessing the public layer of the same data.
+### What this MCP does NOT do
+- Does **not** call any private Licinexus infrastructure or database.
+- Does **not** include the Licinexus matching engine, supplier scoring, price aggregation, generated artifacts, or any proprietary data.
+- Is **not** a replacement for the [Licinexus](https://licinexus.com.br) product — it's a complementary open-source tool for the public layer of the same data.
 
-See [docs/architecture.md](docs/architecture.md) for the full separation model.
+See [docs/architecture.md](docs/architecture.md) for the full three-wall separation model.
+
+## Need automatic matching, alerts, or proposal management?
+
+The Licinexus product builds on top of these public sources with proprietary matching, scoring, and AI-generated artifacts. **This MCP intentionally does not replicate those features.**
+
+→ <https://licinexus.com.br>
 
 ## Contributing
 
-PRs welcome under [DCO](https://developercertificate.org/) (Developer Certificate of Origin). Sign your commits with `git commit --signoff`.
+PRs welcome under [DCO](https://developercertificate.org/) (Developer Certificate of Origin) — sign your commits with `git commit --signoff`.
 
 Please **open an issue first** to discuss any non-trivial change. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Support
 
-This is a community project. **Best-effort, no SLA.** Issues triaged within 7 days when possible. For Licinexus product questions (matching, alerts, gestão de propostas), please contact us at [licinexus.com.br](https://licinexus.com.br).
+Community project. **Best-effort, no SLA.** Issues triaged within 7 days when possible.
+
+For paid support and product features, see [licinexus.com.br](https://licinexus.com.br).
 
 ## Security
 
-Found a vulnerability? See [SECURITY.md](SECURITY.md) for responsible disclosure.
+Found a vulnerability? See [SECURITY.md](SECURITY.md) for responsible disclosure (do not open public issues).
 
 ## License
 

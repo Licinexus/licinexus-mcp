@@ -7,7 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
+## [0.1.0] - 2026-04-25
+
+First public-ready release. Public launch pending coordinated rollout.
+
+### Added (cumulative since 0.0.1)
+- 16 tools across 6 PNCP domains + Receita Federal CNPJ enrichment
+- 4 prompt templates for common analysis workflows
+- 2 read-only resources (modalidades + scope)
+- Smoke test against real PNCP & BrasilAPI (15/15 endpoints validated)
+- Three layers of isolation from the private Licinexus codebase:
+  enforced by ESLint rule, CI grep job, and physical repo separation
+- DCO check on every PR
+- TypeScript 6 + Node 20/22 matrix CI
+- 33 unit tests, all green
+
+### Phase breakdown
 - **Phase 5** — CNPJ enrichment (1 tool), 4 prompts, 2 resources:
   - `get_cnpj_data` — public Receita Federal data via BrasilAPI (provider swappable)
   - Prompts: `analyze_edital`, `analyze_orgao`, `find_arp_opportunities`, `check_supplier`
