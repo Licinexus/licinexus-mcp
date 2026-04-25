@@ -42,12 +42,22 @@ Then configure your MCP client (Claude Desktop example):
 ## Roadmap
 
 - [x] **Phase 0** — Scaffold, governance, CI
-- [ ] **Phase 1** — PNCP search/get for licitações (compras)
+- [x] **Phase 1** — PNCP search/get for licitações (compras): 5 tools
 - [ ] **Phase 2** — Contratos + Termos Aditivos + Instrumentos de Cobrança
 - [ ] **Phase 3** — Atas de Registro de Preço + saldos
 - [ ] **Phase 4** — Órgãos + Fornecedores + PCA
 - [ ] **Phase 5** — CNPJ enrichment via BrasilAPI + prompts prontos
 - [ ] **Phase 6** — Public launch
+
+### Phase 1 — Tools available
+
+| Tool | Description |
+| --- | --- |
+| `search_licitacoes` | Search bids by date range, modality, UF, agency CNPJ, value, keyword |
+| `get_licitacao` | Full details of a single bid by PNCP control number |
+| `list_licitacao_itens` | Items (lots) of a bid: descriptions, quantities, estimated values |
+| `list_licitacao_resultados` | Bidding results per item: winners, runners-up, prices, suppliers |
+| `list_licitacao_arquivos` | Edital files (PDFs, attachments, terms of reference) |
 
 ## Scope
 

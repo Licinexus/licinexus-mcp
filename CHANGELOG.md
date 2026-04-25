@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Phase 1** — PNCP adapter and 5 tools for `compras/licitações`:
+  - `search_licitacoes` — query by date, modality, UF, CNPJ, value, keyword
+  - `get_licitacao` — fetch single bid by PNCP control number or components
+  - `list_licitacao_itens` — list items of a bid
+  - `list_licitacao_resultados` — list bidding results for a specific item
+  - `list_licitacao_arquivos` — list files attached to a bid
+- In-memory LRU cache (TTL 5–30 min) for PNCP responses.
+- Modalidade reference table (Lei 14.133 codes 1–13).
 - Initial project scaffold (Phase 0).
 - TypeScript + MCP SDK setup.
 - Governance: MIT, DCO, Code of Conduct, Security policy.

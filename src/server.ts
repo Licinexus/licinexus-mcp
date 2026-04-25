@@ -1,14 +1,18 @@
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import {
-  ListToolsRequestSchema,
-  ListResourcesRequestSchema,
+  CallToolRequestSchema,
   ListPromptsRequestSchema,
+  ListResourcesRequestSchema,
+  ListToolsRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
+import { allTools, toolMap } from './tools/index.js';
+import { errorResult } from './tools/types.js';
+import { SERVER_NAME, SERVER_VERSION } from './version.js';
 
 export const SERVER_INFO = {
-  name: 'licinexus-mcp',
-  version: '0.0.1',
+  name: SERVER_NAME,
+  version: SERVER_VERSION,
 } as const;
 
 export function createServer(): Server {
@@ -27,8 +31,17 @@ export function createServer(): Server {
   );
 
   server.setRequestHandler(ListToolsRequestSchema, async () => ({
-    tools: [],
+    tools: allTools.map((t) => t.definition),
   }));
+
+  server.setRequestHandler(CallToolRequestSchema, async (request) => {
+    const { name, arguments: args } = request.params;
+    const tool = toolMap.get(name);
+    if (!tool) {
+      return errorResult(`Unknown tool: "${name}"`);
+    }
+    return tool.handler(args);
+  });
 
   server.setRequestHandler(ListResourcesRequestSchema, async () => ({
     resources: [],
