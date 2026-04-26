@@ -1,3 +1,7 @@
+<p align="right">
+  🇧🇷 <a href="README.md"><b>Versão em português</b></a>  ·  🇺🇸 English
+</p>
+
 <p align="center">
   <a href="https://licinexus.com.br">
     <img src=".github/assets/logo.png" alt="Licinexus" width="380">
