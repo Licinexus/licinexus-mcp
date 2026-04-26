@@ -1,32 +1,36 @@
-# Contributor Covenant Code of Conduct
+<p align="right">
+  🇧🇷 Português  ·  🇺🇸 <a href="CODE_OF_CONDUCT.en.md">English version</a>
+</p>
 
-## Our Pledge
+# Código de Conduta do Contributor Covenant
 
-We as members, contributors, and leaders pledge to make participation in our community a harassment-free experience for everyone, regardless of age, body size, visible or invisible disability, ethnicity, sex characteristics, gender identity and expression, level of experience, education, socio-economic status, nationality, personal appearance, race, religion, or sexual identity and orientation.
+## Nosso compromisso
 
-We pledge to act and interact in ways that contribute to an open, welcoming, diverse, inclusive, and healthy community.
+Nós, como membros, contribuidores e líderes, comprometemo-nos a fazer da participação em nossa comunidade uma experiência livre de assédio para todas as pessoas, independentemente de idade, tamanho corporal, deficiência visível ou invisível, etnia, características sexuais, identidade e expressão de gênero, nível de experiência, educação, status socioeconômico, nacionalidade, aparência pessoal, raça, religião ou orientação sexual.
 
-## Our Standards
+Comprometemo-nos a agir e interagir de formas que contribuam para uma comunidade aberta, acolhedora, diversa, inclusiva e saudável.
 
-Examples of behavior that contributes to a positive environment include:
+## Nossos padrões
 
-- Demonstrating empathy and kindness toward other people
-- Being respectful of differing opinions, viewpoints, and experiences
-- Giving and gracefully accepting constructive feedback
-- Accepting responsibility and apologizing to those affected by our mistakes
-- Focusing on what is best for the overall community
+Exemplos de comportamentos que contribuem para um ambiente positivo:
 
-Examples of unacceptable behavior include:
+- Demonstrar empatia e bondade em relação às outras pessoas
+- Respeitar opiniões, pontos de vista e experiências divergentes
+- Dar e aceitar com elegância feedbacks construtivos
+- Aceitar responsabilidade e pedir desculpas para os afetados pelos nossos erros
+- Focar no que é melhor para a comunidade como um todo
 
-- Trolling, insulting or derogatory comments, and personal or political attacks
-- Public or private harassment
-- Publishing others' private information without explicit permission
-- Other conduct which could reasonably be considered inappropriate in a professional setting
+Exemplos de comportamentos inaceitáveis:
 
-## Enforcement
+- Trolagem, comentários insultuosos ou depreciativos, ataques pessoais ou políticos
+- Assédio público ou privado
+- Publicação de informação privada de terceiros sem permissão explícita
+- Outras condutas que possam razoavelmente ser consideradas inadequadas em um ambiente profissional
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to the maintainers at **licitacao@licinexus.com.br**. All complaints will be reviewed and investigated promptly and fairly.
+## Aplicação
 
-## Attribution
+Casos de comportamento abusivo, de assédio ou de outra forma inaceitável podem ser reportados aos mantenedores em **licitacao@licinexus.com.br**. Todas as reclamações serão revisadas e investigadas de forma rápida e justa.
 
-This Code of Conduct is adapted from the [Contributor Covenant](https://www.contributor-covenant.org/), version 2.1.
+## Atribuição
+
+Este Código de Conduta é adaptado do [Contributor Covenant](https://www.contributor-covenant.org/), versão 2.1, [traduzido para o português brasileiro](https://www.contributor-covenant.org/pt_br/version/2/1/code_of_conduct/).

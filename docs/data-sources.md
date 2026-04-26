@@ -1,50 +1,54 @@
-# Data Sources
+<p align="right">
+  🇧🇷 Português  ·  🇺🇸 <a href="data-sources.en.md">English version</a>
+</p>
 
-All data exposed by this MCP comes from **public, anonymous Brazilian government APIs and well-known public aggregators**. This document maps each source.
+# Fontes de dados
+
+Todos os dados expostos por este MCP vêm de **APIs públicas e anônimas do governo brasileiro e de agregadores públicos conhecidos**. Este documento mapeia cada fonte.
 
 ## PNCP — Portal Nacional de Contratações Públicas
 
-**Base URLs:**
-- `https://pncp.gov.br/api/consulta/v1` — search/listing
-- `https://pncp.gov.br/api/pncp/v1` — detail endpoints
+**URLs base:**
+- `https://pncp.gov.br/api/consulta/v1` — busca / listagem
+- `https://pncp.gov.br/api/pncp/v1` — endpoints de detalhe
 
-**License/Terms:** Public data per Lei 14.133/2021 and Lei de Acesso à Informação (12.527/2011).
+**Licença/Termos:** Dado público pela Lei 14.133/2021 e pela Lei de Acesso à Informação (12.527/2011).
 
-### Domains we plan to expose
+### Domínios que planejamos expor
 
-| Domain | Endpoints | Status |
+| Domínio | Endpoints | Status |
 | --- | --- | --- |
-| **Compras / Editais** | `/contratacoes/publicacao`, `/contratacoes/proposta`, `/orgaos/{cnpj}/compras/{ano}/{seq}` | Planned (Phase 1) |
-| **Itens & Resultados** | `/orgaos/{cnpj}/compras/{ano}/{seq}/itens`, `.../resultados` | Planned (Phase 1) |
-| **Arquivos** | `/orgaos/{cnpj}/compras/{ano}/{seq}/arquivos` | Planned (Phase 2) |
-| **Contratos** | `/contratos`, `/contratos/atualizacao` | Planned (Phase 2) |
-| **Termos Aditivos** | `/orgaos/{cnpj}/contratos/{ano}/{seq}/termos` | Planned (Phase 2) |
-| **Instrumentos de Cobrança (NFes)** | `/orgaos/{cnpj}/contratos/{ano}/{seq}/instrumentocobranca` | Planned (Phase 2) |
-| **Atas RP** | `/atas`, `/orgaos/{cnpj}/compras/{ano}/{seq}/atas/{seq_ata}` | Planned (Phase 3) |
-| **Órgãos** | `/orgaos/{cnpj}` | Planned (Phase 4) |
-| **PCA (Plano de Contratação Anual)** | `/pca/`, `/orgaos/{cnpj}/pca/{ano}/{seq}/itens` | Planned (Phase 4) |
+| **Compras / Editais** | `/contratacoes/publicacao`, `/contratacoes/proposta`, `/orgaos/{cnpj}/compras/{ano}/{seq}` | Implementado (Fase 1) |
+| **Itens & Resultados** | `/orgaos/{cnpj}/compras/{ano}/{seq}/itens`, `.../resultados` | Implementado (Fase 1) |
+| **Arquivos** | `/orgaos/{cnpj}/compras/{ano}/{seq}/arquivos` | Implementado (Fase 2) |
+| **Contratos** | `/contratos`, `/contratos/atualizacao` | Implementado (Fase 2) |
+| **Termos Aditivos** | `/orgaos/{cnpj}/contratos/{ano}/{seq}/termos` | Implementado (Fase 2) |
+| **Instrumentos de Cobrança (NFes)** | `/orgaos/{cnpj}/contratos/{ano}/{seq}/instrumentocobranca` | Implementado (Fase 2) |
+| **Atas RP** | `/atas`, `/orgaos/{cnpj}/compras/{ano}/{seq}/atas/{seq_ata}` | Implementado (Fase 3) |
+| **Órgãos** | `/orgaos/{cnpj}` | Implementado (Fase 4) |
+| **PCA (Plano de Contratação Anual)** | `/pca/atualizacao`, `/orgaos/{cnpj}/pca/{ano}/{seq}/itens` | Implementado (Fase 4) |
 
-## Receita Federal CNPJ (via aggregator)
+## CNPJ da Receita Federal (via agregador)
 
-We do **not** ship the Receita Federal monthly dump (~15GB) — that's appropriate for a server-side collector but not for an end-user MCP install. Instead, we wrap a public aggregator API:
+**Não** distribuímos o dump mensal da Receita Federal (~15 GB) — isso é apropriado para coletor server-side, mas não para uma instalação MCP local. Em vez disso, encapsulamos uma API agregadora pública:
 
-**Default provider:** [BrasilAPI](https://brasilapi.com.br) — `https://brasilapi.com.br/api/cnpj/v1/{cnpj}`
+**Provedor padrão:** [BrasilAPI](https://brasilapi.com.br) — `https://brasilapi.com.br/api/cnpj/v1/{cnpj}`
 
-**License/Terms:** Public data from Receita Federal Dados Abertos. BrasilAPI is community-maintained and free.
+**Licença/Termos:** Dado público da Receita Federal (Dados Abertos). BrasilAPI é mantida pela comunidade e gratuita.
 
-**Swappable:** users can override via `CNPJ_PROVIDER` env var. Future versions may support `minhareceita`, `cnpja`, or a Licinexus-hosted public endpoint.
+**Trocável:** usuários podem sobrescrever via variável `CNPJ_PROVIDER`. Versões futuras podem suportar `minhareceita`, `cnpja`, ou um endpoint hospedado pela Licinexus.
 
-## What we do NOT use
+## O que NÃO usamos
 
-- **No paywalled APIs**
-- **No scraped data behind auth or CAPTCHAs**
-- **No private Licinexus database or API** — see [architecture.md](architecture.md)
-- **No customer data**
+- **Sem APIs com paywall**
+- **Sem dado raspado atrás de auth ou CAPTCHA**
+- **Sem banco ou API privada da Licinexus** — veja [architecture.md](architecture.md)
+- **Sem dado de cliente**
 
-## Updating this list
+## Atualizando esta lista
 
-New data sources require an issue with the `data-source` label, scope review, and a maintainer's sign-off. The bar:
+Novas fontes de dados exigem uma issue com a label `data-source`, revisão de escopo e aprovação de um mantenedor. O critério:
 
-1. Source is genuinely public.
-2. Source has stable terms of service (or is government-mandated open data).
-3. Adding the source doesn't blur the line with the Licinexus paid product.
+1. A fonte é genuinamente pública.
+2. A fonte tem termos de uso estáveis (ou é dado aberto mandatado por lei).
+3. Adicionar a fonte não embaralha a fronteira com o produto pago Licinexus.
