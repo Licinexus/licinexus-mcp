@@ -1,79 +1,83 @@
-# Contributing to @licinexusbr/mcp
+<p align="right">
+  🇧🇷 Português  ·  🇺🇸 <a href="CONTRIBUTING.en.md">English version</a>
+</p>
 
-Thanks for considering a contribution! A few rules to keep this project healthy.
+# Como contribuir com `@licinexusbr/mcp`
 
-## Open an issue first
+Obrigado por considerar uma contribuição! Algumas regras para manter o projeto saudável.
 
-For any non-trivial change (new tool, new adapter, new dependency, refactor), **please open an issue first** to discuss the approach. Drive-by PRs without discussion may be closed.
+## Abra uma issue antes
 
-Bug fixes for clear bugs (with reproduction steps) can go straight to PR.
+Para qualquer mudança não trivial (nova ferramenta, novo adaptador, nova dependência, refatoração), **por favor abra uma issue antes** para discutir a abordagem. PRs sem discussão prévia podem ser fechados.
+
+Correções de bugs claros (com passos para reproduzir) podem ir direto para PR.
 
 ## Developer Certificate of Origin (DCO)
 
-We use [DCO](https://developercertificate.org/) instead of a CLA. Every commit must include a `Signed-off-by` line:
+Usamos [DCO](https://developercertificate.org/) em vez de CLA. Todo commit deve incluir uma linha `Signed-off-by`:
 
 ```bash
-git commit --signoff -m "your message"
-# or git commit -s -m "your message"
+git commit --signoff -m "sua mensagem"
+# ou: git commit -s -m "sua mensagem"
 ```
 
-The `Signed-off-by` line certifies that you wrote the code, or otherwise have the right to contribute it under the project's license. The full text is at <https://developercertificate.org/>.
+A linha `Signed-off-by` certifica que você escreveu o código, ou possui o direito de contribuir com ele sob a licença do projeto. O texto completo está em <https://developercertificate.org/>.
 
-A CI check enforces this on every PR.
+Uma checagem de CI valida isso em todo PR.
 
-## What we accept
+## O que aceitamos
 
-✅ **Yes, please:**
-- Bug fixes
-- New adapters for public Brazilian government APIs (state TCEs, MPs, etc.)
-- Improvements to existing tools (better filters, pagination, error messages)
-- Documentation, examples, tests
-- Performance / caching improvements
+✅ **Sim, por favor:**
+- Correções de bugs
+- Novos adaptadores para APIs públicas brasileiras de governo (TCEs estaduais, MPs, etc.)
+- Melhorias nas ferramentas existentes (filtros melhores, paginação, mensagens de erro)
+- Documentação, exemplos, testes
+- Melhorias de desempenho / cache
 
-❌ **No, thanks:**
-- Code that imports from private Licinexus packages (CI blocks this anyway)
-- Features that duplicate the Licinexus paid product (matching engine, supplier scoring, price aggregation, AI-generated artifacts) — this MCP intentionally stops at "raw public data"
-- Adapters for non-public or paywalled data sources
-- Heavy dependencies without strong justification
+❌ **Não, obrigado:**
+- Código que importe de pacotes privados da Licinexus (o CI já bloqueia isso)
+- Funcionalidades que dupliquem o produto pago Licinexus (motor de correspondência, pontuação de fornecedores, agregação de preços, artefatos gerados por IA) — este MCP intencionalmente para em "dado público bruto"
+- Adaptadores para fontes não públicas ou com paywall
+- Dependências pesadas sem justificativa forte
 
-## Development setup
+## Configuração de desenvolvimento
 
 ```bash
 git clone https://github.com/Licinexus/licinexus-mcp.git
 cd licinexus-mcp
 npm install
-npm run dev      # run with tsx
-npm test         # run vitest
-npm run lint     # run eslint
+npm run dev      # roda com tsx
+npm test         # roda vitest
+npm run lint     # roda eslint
 npm run typecheck
 ```
 
-## Architecture
+## Arquitetura
 
-Before contributing, read [docs/architecture.md](docs/architecture.md). The protection model is non-negotiable — PRs that weaken the boundary between this MCP and the private Licinexus codebase will be rejected.
+Antes de contribuir, leia [docs/architecture.md](docs/architecture.md). O modelo de proteção é inegociável — PRs que enfraqueçam a fronteira entre este MCP e o código privado da Licinexus serão rejeitados.
 
-## Code style
+## Estilo de código
 
-- TypeScript strict mode.
-- Prettier for formatting (`npm run format`).
-- ESLint must pass (`npm run lint`).
-- Use `zod` for schema validation at boundaries.
-- Prefer named exports.
+- TypeScript em modo estrito.
+- Prettier para formatação (`npm run format`).
+- ESLint precisa passar (`npm run lint`).
+- Use `zod` para validação de schemas nas fronteiras.
+- Prefira exportações nomeadas.
 
-## Commit messages
+## Mensagens de commit
 
-Conventional Commits style is appreciated but not required:
+O estilo Conventional Commits é apreciado mas não obrigatório:
 
 ```
-feat(pncp): add search_atas_rp tool
-fix(cnpj): handle 14-digit CNPJ with leading zeros
-docs: clarify scope in README
+feat(pncp): adiciona ferramenta search_atas_rp
+fix(cnpj): trata CNPJ de 14 dígitos com zeros à esquerda
+docs: clarifica escopo no README
 ```
 
-## License
+## Licença
 
-By contributing, you agree that your contributions will be licensed under the MIT License.
+Ao contribuir, você concorda que suas contribuições serão licenciadas sob a licença MIT.
 
-## Code of Conduct
+## Código de conduta
 
-By participating, you agree to abide by the [Code of Conduct](CODE_OF_CONDUCT.md).
+Ao participar, você concorda em respeitar o [Código de Conduta](CODE_OF_CONDUCT.md).

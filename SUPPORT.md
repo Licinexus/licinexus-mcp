@@ -1,27 +1,31 @@
-# Support
+<p align="right">
+  🇧🇷 Português  ·  🇺🇸 <a href="SUPPORT.en.md">English version</a>
+</p>
 
-This is a **community project maintained on a best-effort basis** by Licinexus. There is no Service Level Agreement (SLA) or guaranteed response time.
+# Suporte
 
-## Where to ask
+Este é um **projeto comunitário mantido em regime de melhor esforço** pela Licinexus. Não há SLA nem tempo de resposta garantido.
 
-| You want to... | Go here |
+## Onde perguntar
+
+| Você quer... | Vá para |
 | --- | --- |
-| Report a bug in this MCP | [Open a GitHub issue](https://github.com/Licinexus/licinexus-mcp/issues/new?template=bug_report.yml) |
-| Request a feature | [Open a feature request](https://github.com/Licinexus/licinexus-mcp/issues/new?template=feature_request.yml) |
-| Ask a question about the Licinexus product (matching, alerts, propostas) | <https://licinexus.com.br/contato> — **not here** |
-| Report a security vulnerability | See [SECURITY.md](SECURITY.md) — do **not** open a public issue |
-| Discuss design / architecture | Open a GitHub Discussion |
+| Reportar um bug deste MCP | [Abra uma issue no GitHub](https://github.com/Licinexus/licinexus-mcp/issues/new?template=bug_report.yml) |
+| Pedir uma nova funcionalidade | [Abra uma feature request](https://github.com/Licinexus/licinexus-mcp/issues/new?template=feature_request.yml) |
+| Tirar dúvida sobre o produto Licinexus (matchmaking, alertas, propostas) | <https://licinexus.com.br/contato> — **não aqui** |
+| Reportar vulnerabilidade de segurança | Veja [SECURITY.md](SECURITY.md) — **não** abra issue pública |
+| Discutir design / arquitetura | Abra uma GitHub Discussion |
 
-## Triage commitment (best-effort)
+## Compromisso de triagem (melhor esforço)
 
-- Bug reports: acknowledged within **7 days** when possible.
-- Feature requests: discussed; no commitment to implement.
-- Pull requests: reviewed within **14 days** when possible.
+- Bug reports: confirmação em até **7 dias** quando possível.
+- Feature requests: discutimos; sem compromisso de implementar.
+- Pull requests: revisão em até **14 dias** quando possível.
 
-If something is urgent for your business, please consider [Licinexus](https://licinexus.com.br) for paid support.
+Se algo é urgente para o seu negócio, considere o produto pago [Licinexus](https://licinexus.com.br) com suporte dedicado.
 
-## Out of scope
+## Fora do escopo
 
-- Custom adapters or integrations for private/paywalled data sources.
-- Help with the [PNCP API](https://pncp.gov.br) itself — that's maintained by the Brazilian government, not us.
-- Anything that requires us to access your private data or systems.
+- Adaptadores customizados ou integrações com fontes privadas / com paywall.
+- Ajuda com a [API do PNCP](https://pncp.gov.br) em si — isso é mantido pelo governo brasileiro, não por nós.
+- Qualquer coisa que exija acesso aos seus dados ou sistemas privados.
