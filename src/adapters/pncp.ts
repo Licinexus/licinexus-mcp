@@ -37,7 +37,7 @@ import { USER_AGENT } from '../version.js';
 const CONSULTA_BASE = 'https://pncp.gov.br/api/consulta/v1';
 const PNCP_BASE = 'https://pncp.gov.br/api/pncp/v1';
 
-const REQUEST_TIMEOUT_MS = 20_000;
+const REQUEST_TIMEOUT_MS = 45_000;
 const MAX_PAGE_SIZE = 50;
 const MIN_PAGE_SIZE = 10; // PNCP requires tamanhoPagina >= 10
 
