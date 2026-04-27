@@ -26,6 +26,7 @@
     "schema:snapshot": "tsx scripts/schema-snapshot.ts",
     "schema:check": "tsx scripts/schema-check.ts",
     "readme:check": "tsx scripts/check-readme-sync.ts",
+    "latency": "tsx scripts/measure-latency.ts",
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "npm run build && npm test"
   },

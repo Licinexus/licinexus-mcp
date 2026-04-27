@@ -1,0 +1,109 @@
+name: Latency tracking
+
+# Roda toda quarta-feira às 13:00 UTC = 10:00 BRT.
+# Mede p50/p95 de cada endpoint contra PNCP e BrasilAPI ao vivo,
+# e atualiza um único "issue de tracking" com o histórico semanal.
+#
+# A intenção é detectar:
+#   - Degradação gradual da API governamental
+#   - Mudança de SLA (PNCP migrando infra etc)
+#   - Picos sazonais (fim de exercício, início de ano fiscal)
+#
+# Trigger manual disponível na aba Actions.
+
+on:
+  schedule:
+    - cron: '0 13 * * 3'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  measure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    outputs:
+      report: ${{ steps.measure.outputs.report }}
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: Measure latency
+        id: measure
+        env:
+          LATENCY_SAMPLES: 3
+        run: |
+          npm run latency 2>/dev/null > latency.json
+          cat latency.json
+
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "## Latency Report" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Endpoint | p50 | p95 | min | max | ok / failed |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| --- | ---: | ---: | ---: | ---: | --- |" >> "$GITHUB_STEP_SUMMARY"
+
+          REPORT=$(jq -r '
+            "| Endpoint | p50 | p95 | min | max | ok / failed |\n| --- | ---: | ---: | ---: | ---: | --- |\n" +
+            ([.results[] |
+              "| `\(.endpoint)` | \(.p50_ms // "—") ms | \(.p95_ms // "—") ms | \(.min_ms // "—") ms | \(.max_ms // "—") ms | \(.ok)/\(.failed) |"
+            ] | join("\n"))
+          ' latency.json)
+
+          echo "$REPORT" >> "$GITHUB_STEP_SUMMARY"
+
+          {
+            echo "report<<EOF"
+            echo "$REPORT"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: latency-${{ github.run_number }}
+          path: latency.json
+          retention-days: 365
+
+  publish:
+    needs: measure
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Update or create tracking issue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPORT: ${{ needs.measure.outputs.report }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          DATE=$(date -u +"%Y-%m-%d")
+
+          existing=$(gh issue list --label latency --state open --json number --jq '.[0].number' --limit 1 || echo "")
+
+          BODY=$(cat <<MSG
+          ### ${DATE} — weekly latency snapshot
+
+          ${REPORT}
+
+          [Full run](${RUN_URL}) · samples: 3 per endpoint · cache cleared between calls
+          MSG
+          )
+
+          if [ -n "${existing}" ]; then
+            gh issue comment "${existing}" --body "${BODY}"
+          else
+            gh issue create \
+              --title "[latency] Weekly PNCP / BrasilAPI tracking" \
+              --label "latency,tracking" \
+              --body "${BODY}"
+          fi

@@ -1,0 +1,69 @@
+name: Close stale issues and PRs
+
+# Marca issues / PRs inativos e fecha após período de carência.
+# Roda toda madrugada às 03:00 UTC = meia-noite BRT.
+#
+# Issues:
+#   - 60 dias sem atividade → marca como stale (label "stale")
+#   - 14 dias após stale sem nova atividade → fecha
+# PRs (mais agressivo, contribuidor pode reabrir):
+#   - 30 dias sem atividade → stale
+#   - 7 dias após → fecha
+#
+# Issues / PRs com qualquer um destes labels NUNCA são fechados:
+#   pinned, security, canary, latency, schema-drift, keep-open
+
+on:
+  schedule:
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/stale@v9
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+          # Issues
+          days-before-issue-stale: 60
+          days-before-issue-close: 14
+          stale-issue-label: stale
+          stale-issue-message: |
+            Esta issue está sem atividade há 60 dias. Sem comentários
+            adicionais, ela será fechada em 14 dias.
+
+            Se ainda é relevante: comente abaixo, ou adicione o label
+            `keep-open` para indicar que deve permanecer aberta.
+          close-issue-message: |
+            Fechada automaticamente por inatividade. Sinta-se livre
+            para reabrir se voltar a ser relevante.
+
+          # Pull requests
+          days-before-pr-stale: 30
+          days-before-pr-close: 7
+          stale-pr-label: stale
+          stale-pr-message: |
+            Este PR está sem atividade há 30 dias. Sem novos commits
+            ou comentários, ele será fechado em 7 dias.
+
+            Se ainda quiser fazer merge: rebase com main, ou adicione
+            o label `keep-open`.
+          close-pr-message: |
+            Fechado automaticamente por inatividade. Reabra se quiser
+            retomar; o trabalho não some, fica acessível pelo histórico.
+
+          # Não fechar nunca
+          exempt-issue-labels: pinned,security,canary,latency,schema-drift,keep-open
+          exempt-pr-labels: pinned,security,keep-open
+
+          # Limites por execução pra evitar processamento massivo numa rodada só
+          operations-per-run: 100
+          remove-stale-when-updated: true
