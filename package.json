@@ -23,6 +23,9 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "smoke": "tsx scripts/smoke-test.ts",
+    "schema:snapshot": "tsx scripts/schema-snapshot.ts",
+    "schema:check": "tsx scripts/schema-check.ts",
+    "readme:check": "tsx scripts/check-readme-sync.ts",
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "npm run build && npm test"
   },

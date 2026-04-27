@@ -1,0 +1,68 @@
+name: Release (auto-publish to npm)
+
+# Triggered when a tag matching v*.*.* is pushed.
+# - Validates tag matches package.json version
+# - Runs full CI (lint, typecheck, test, build)
+# - Publishes to npm (requires NPM_TOKEN secret)
+# - Creates GitHub Release with auto-generated notes
+#
+# To release:
+#   1. Bump version in package.json + CHANGELOG.md
+#   2. Commit
+#   3. git tag v0.1.0 && git push --tags
+#   4. This workflow runs and the package goes live
+
+on:
+  push:
+    tags: ['v*.*.*']
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 20
+          cache: 'npm'
+          registry-url: 'https://registry.npmjs.org'
+
+      - run: npm ci
+
+      - name: Verify tag matches package.json
+        run: |
+          PKG_VERSION=$(node -p "require('./package.json').version")
+          TAG_VERSION="${GITHUB_REF#refs/tags/v}"
+          if [ "$PKG_VERSION" != "$TAG_VERSION" ]; then
+            echo "::error::Tag $TAG_VERSION does not match package.json version $PKG_VERSION"
+            exit 1
+          fi
+          echo "Tag matches: $PKG_VERSION"
+
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - run: npm run readme:check
+
+      - name: Publish to npm
+        run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG_VERSION="${GITHUB_REF#refs/tags/}"
+          gh release create "$TAG_VERSION" \
+            --title "$TAG_VERSION" \
+            --generate-notes \
+            --latest
