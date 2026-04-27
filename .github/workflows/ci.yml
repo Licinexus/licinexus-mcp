@@ -39,6 +39,9 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: README sync check
+        run: npm run readme:check
+
   isolation-check:
     name: No private imports
     runs-on: ubuntu-latest
