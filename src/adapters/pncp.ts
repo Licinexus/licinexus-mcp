@@ -37,7 +37,10 @@ import { USER_AGENT } from '../version.js';
 const CONSULTA_BASE = 'https://pncp.gov.br/api/consulta/v1';
 const PNCP_BASE = 'https://pncp.gov.br/api/pncp/v1';
 
-const REQUEST_TIMEOUT_MS = 45_000;
+// 27s per attempt × 2 attempts on timeout + 500ms backoff = 54.5s worst case,
+// fitting under the MCP client default deadline (60s).
+const REQUEST_TIMEOUT_MS = 27_000;
+const MAX_TIMEOUT_ATTEMPTS = 2;
 const MAX_PAGE_SIZE = 50;
 const MIN_PAGE_SIZE = 10; // PNCP requires tamanhoPagina >= 10
 
@@ -65,6 +68,7 @@ const pncpClient: AxiosInstance = axios.create({
 
 async function withRetry<T>(fn: () => Promise<T>, attempts = 3): Promise<T> {
   let lastError: unknown;
+  let timeoutAttempts = 0;
   for (let i = 0; i < attempts; i++) {
     try {
       return await fn();
@@ -74,6 +78,12 @@ async function withRetry<T>(fn: () => Promise<T>, attempts = 3): Promise<T> {
         const status = err.response?.status;
         if (status && status >= 400 && status < 500 && status !== 408 && status !== 429) {
           throw err;
+        }
+        if (err.code === 'ECONNABORTED') {
+          timeoutAttempts++;
+          if (timeoutAttempts >= MAX_TIMEOUT_ATTEMPTS) {
+            throw err;
+          }
         }
       }
       if (i < attempts - 1) {
