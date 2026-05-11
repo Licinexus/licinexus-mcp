@@ -513,7 +513,7 @@ function mapBrasilApiToOrgao(cnpj: string, c: CnpjData): Orgao {
   const naturezaNome =
     typeof c.natureza_juridica === 'string'
       ? c.natureza_juridica
-      : c.natureza_juridica?.descricao ?? undefined;
+      : (c.natureza_juridica?.descricao ?? undefined);
 
   return OrgaoSchema.parse({
     cnpj,

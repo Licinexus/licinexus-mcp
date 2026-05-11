@@ -11,7 +11,11 @@ vi.mock('axios', async () => {
   const create = vi.fn((_cfg?: unknown) => {
     counter++;
     const get = counter === 1 ? consultaGet : pncpGet;
-    return { get, defaults: {}, interceptors: { request: { use: vi.fn() }, response: { use: vi.fn() } } } as unknown as AxiosInstance;
+    return {
+      get,
+      defaults: {},
+      interceptors: { request: { use: vi.fn() }, response: { use: vi.fn() } },
+    } as unknown as AxiosInstance;
   });
   return {
     ...actual,
