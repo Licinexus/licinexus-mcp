@@ -54,6 +54,10 @@ Wraps the most useful endpoints of the **Portal Nacional de Contratações Públ
 
 No API keys, no registration, no local database — the server hits public endpoints directly.
 
+> ⚠️ **Important:** This is a **stdio-based** MCP server. You **don't** run it directly in the terminal — the **MCP client** (Claude Desktop, Cursor, etc.) invokes the server when needed, and communication happens via JSON-RPC over stdin/stdout. If you run `npx @licinexusbr/mcp` directly in a terminal, it will look "frozen" — that's expected; the server is waiting for a client to connect.
+>
+> Similarly, `npx -y @licinexusbr/mcp` **is not a global install** — it just downloads the package to a local cache (`~/.npm/_npx/`) and executes it. The MCP client invokes `npx` every time it needs the server; subsequent runs use the cache and are instant. (You can also use `npm exec` instead of `npx` — they're equivalent.)
+
 ---
 
 ### 1. Claude Desktop ⭐ (recommended)
