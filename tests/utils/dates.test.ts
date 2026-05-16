@@ -2,9 +2,20 @@ import { describe, it, expect } from 'vitest';
 import {
   daysBetweenPncpDates,
   defaultDateRange,
+  formatPncpDate,
   isValidPncpDate,
   validatePncpDateRange,
 } from '../../src/utils/dates.js';
+
+describe('formatPncpDate', () => {
+  it('zero-pads month and day values', () => {
+    expect(formatPncpDate(new Date('2024-03-05T12:00:00Z'))).toBe('20240305');
+  });
+
+  it('formats a late-year date', () => {
+    expect(formatPncpDate(new Date('2026-12-31T23:00:00Z'))).toBe('20261231');
+  });
+});
 
 describe('isValidPncpDate', () => {
   it('accepts valid 8-digit YYYYMMDD', () => {
