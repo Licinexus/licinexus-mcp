@@ -76,8 +76,7 @@ function summarize(c: Contrato) {
 export const searchContratos: ToolDef = {
   definition: {
     name: 'search_contratos',
-    description:
-      `Search public procurement contracts (contratos) on PNCP. Useful for analyzing market history, supplier behavior, and agency spending patterns. Defaults to last 30 days when no date range is provided. Maximum date range per query: ${PNCP_MAX_DATE_RANGE_DAYS} days (PNCP limit); wider windows return HTTP 422. For multi-year searches, issue multiple calls.`,
+    description: `Search public procurement contracts (contratos) on PNCP. Useful for analyzing market history, supplier behavior, and agency spending patterns. Defaults to last 30 days when no date range is provided. Maximum date range per query: ${PNCP_MAX_DATE_RANGE_DAYS} days (PNCP limit); wider windows return HTTP 422. For multi-year searches, issue multiple calls.`,
     inputSchema: {
       type: 'object',
       properties: {

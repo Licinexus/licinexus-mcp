@@ -1,10 +1,6 @@
 import { z } from 'zod';
 import { listContratacoes, PncpError } from '../adapters/pncp.js';
-import {
-  isValidPncpDate,
-  daysBetweenPncpDates,
-  PNCP_MAX_DATE_RANGE_DAYS,
-} from '../utils/dates.js';
+import { isValidPncpDate, daysBetweenPncpDates, PNCP_MAX_DATE_RANGE_DAYS } from '../utils/dates.js';
 import { DEFAULT_MODALIDADES, MODALIDADE_IDS, MODALIDADES_PNCP } from '../schemas/modalidades.js';
 import { EsferaSchema, ESFERA_VALUES, matchesEsfera } from '../utils/esfera.js';
 import type { ToolDef } from './types.js';
@@ -35,7 +31,9 @@ type Args = z.infer<typeof ArgsSchema>;
 type Granularidade = z.infer<typeof GranularidadeSchema>;
 
 function parsePncpDate(s: string): Date {
-  return new Date(Date.UTC(Number(s.slice(0, 4)), Number(s.slice(4, 6)) - 1, Number(s.slice(6, 8))));
+  return new Date(
+    Date.UTC(Number(s.slice(0, 4)), Number(s.slice(4, 6)) - 1, Number(s.slice(6, 8))),
+  );
 }
 
 function formatPncp(d: Date): string {
@@ -56,7 +54,11 @@ function bucketKey(d: Date, gran: Granularidade): string {
   const target = new Date(Date.UTC(y, d.getUTCMonth(), d.getUTCDate()));
   target.setUTCDate(target.getUTCDate() + 3 - ((target.getUTCDay() + 6) % 7));
   const week1 = new Date(Date.UTC(target.getUTCFullYear(), 0, 4));
-  const week = 1 + Math.round(((target.getTime() - week1.getTime()) / 86_400_000 - 3 + ((week1.getUTCDay() + 6) % 7)) / 7);
+  const week =
+    1 +
+    Math.round(
+      ((target.getTime() - week1.getTime()) / 86_400_000 - 3 + ((week1.getUTCDay() + 6) % 7)) / 7,
+    );
   return `${target.getUTCFullYear()}-W${String(week).padStart(2, '0')}`;
 }
 
@@ -248,7 +250,8 @@ export const aggregateLicitacoes: ToolDef = {
     if (buckets.length === 0) return errorResult('No buckets generated for the given range.');
 
     const wantsValor =
-      args.metricas.includes('valorEstimadoTotal') || args.metricas.includes('valorHomologadoTotal');
+      args.metricas.includes('valorEstimadoTotal') ||
+      args.metricas.includes('valorHomologadoTotal');
     const needsPagination = wantsValor || args.esfera != null;
 
     // Safety budget for paginated mode
@@ -262,9 +265,7 @@ export const aggregateLicitacoes: ToolDef = {
     try {
       // Run sequentially within a bucket × modalidade pair to be polite with PNCP,
       // but parallel across pairs with a small concurrency cap.
-      const tasks = buckets.flatMap((b) =>
-        modalidades.map((m) => ({ bucket: b, modalidade: m })),
-      );
+      const tasks = buckets.flatMap((b) => modalidades.map((m) => ({ bucket: b, modalidade: m })));
       const concurrency = 4;
       const results = new Array<{
         bucket: Bucket;
@@ -290,7 +291,12 @@ export const aggregateLicitacoes: ToolDef = {
       // Reduce: group by bucket key
       const grouped = new Map<
         string,
-        { count: number; valorEstimadoTotal: number; valorHomologadoTotal: number; paginated: boolean }
+        {
+          count: number;
+          valorEstimadoTotal: number;
+          valorHomologadoTotal: number;
+          paginated: boolean;
+        }
       >();
       for (const { bucket, result } of results) {
         const existing = grouped.get(bucket.key) ?? {
@@ -322,8 +328,10 @@ export const aggregateLicitacoes: ToolDef = {
             dataFinal: b.dataFinal,
           };
           if (args.metricas.includes('count')) row.count = g?.count ?? 0;
-          if (args.metricas.includes('valorEstimadoTotal')) row.valorEstimadoTotal = g?.valorEstimadoTotal ?? 0;
-          if (args.metricas.includes('valorHomologadoTotal')) row.valorHomologadoTotal = g?.valorHomologadoTotal ?? 0;
+          if (args.metricas.includes('valorEstimadoTotal'))
+            row.valorEstimadoTotal = g?.valorEstimadoTotal ?? 0;
+          if (args.metricas.includes('valorHomologadoTotal'))
+            row.valorHomologadoTotal = g?.valorHomologadoTotal ?? 0;
           return row;
         });
 

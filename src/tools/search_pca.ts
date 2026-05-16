@@ -20,8 +20,7 @@ const ArgsSchema = z.object({
 export const searchPca: ToolDef = {
   definition: {
     name: 'search_pca',
-    description:
-      `Search recently published/updated Plano de Contratação Anual (PCA) entries — what public agencies INTEND to buy. Returns PCA entries (one per agency unit) with their items embedded. Filter by classification: 'material' or 'servico'. Defaults: last 30 days, classification 'material'. Per Lei 14.133. Maximum date range per query: ${PNCP_MAX_DATE_RANGE_DAYS} days (PNCP limit).`,
+    description: `Search recently published/updated Plano de Contratação Anual (PCA) entries — what public agencies INTEND to buy. Returns PCA entries (one per agency unit) with their items embedded. Filter by classification: 'material' or 'servico'. Defaults: last 30 days, classification 'material'. Per Lei 14.133. Maximum date range per query: ${PNCP_MAX_DATE_RANGE_DAYS} days (PNCP limit).`,
     inputSchema: {
       type: 'object',
       properties: {

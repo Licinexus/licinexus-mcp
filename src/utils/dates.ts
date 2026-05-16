@@ -30,7 +30,8 @@ function parsePncpDate(s: string): Date | null {
   const month = Number(s.slice(4, 6)) - 1;
   const day = Number(s.slice(6, 8));
   const d = new Date(Date.UTC(year, month, day));
-  if (d.getUTCFullYear() !== year || d.getUTCMonth() !== month || d.getUTCDate() !== day) return null;
+  if (d.getUTCFullYear() !== year || d.getUTCMonth() !== month || d.getUTCDate() !== day)
+    return null;
   return d;
 }
 
@@ -50,7 +51,10 @@ export function validatePncpDateRange(
     return { ok: false, reason: 'Invalid date format. Use YYYYMMDD.' };
   }
   if (days < 0) {
-    return { ok: false, reason: `dataInicial (${dataInicial}) must be on or before dataFinal (${dataFinal}).` };
+    return {
+      ok: false,
+      reason: `dataInicial (${dataInicial}) must be on or before dataFinal (${dataFinal}).`,
+    };
   }
   if (days > PNCP_MAX_DATE_RANGE_DAYS) {
     return {

@@ -88,8 +88,16 @@ describe('defaultDateRange', () => {
 
   it('respects custom daysBack value', () => {
     const r = defaultDateRange(30);
-    const start = new Date(r.dataInicial.slice(0, 4), r.dataInicial.slice(4, 6) - 1, r.dataInicial.slice(6, 8));
-    const end = new Date(r.dataFinal.slice(0, 4), r.dataFinal.slice(4, 6) - 1, r.dataFinal.slice(6, 8));
+    const start = new Date(
+      r.dataInicial.slice(0, 4),
+      r.dataInicial.slice(4, 6) - 1,
+      r.dataInicial.slice(6, 8),
+    );
+    const end = new Date(
+      r.dataFinal.slice(0, 4),
+      r.dataFinal.slice(4, 6) - 1,
+      r.dataFinal.slice(6, 8),
+    );
     const diffDays = Math.round((end.getTime() - start.getTime()) / 86_400_000);
     expect(diffDays).toBe(30);
   });

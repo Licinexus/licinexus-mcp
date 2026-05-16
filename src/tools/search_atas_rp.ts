@@ -54,8 +54,7 @@ function summarize(a: Ata) {
 export const searchAtasRp: ToolDef = {
   definition: {
     name: 'search_atas_rp',
-    description:
-      `Search Atas de Registro de Preço (price-registry agreements) on PNCP. ARPs are pre-negotiated agreements that any compatible agency can use within the validity period — finding ones still in vigor with available balance is a key business opportunity. Defaults: last 90 days, only active (somenteVigentes=true). Maximum date range per query: ${PNCP_MAX_DATE_RANGE_DAYS} days (PNCP limit); wider windows return HTTP 422.`,
+    description: `Search Atas de Registro de Preço (price-registry agreements) on PNCP. ARPs are pre-negotiated agreements that any compatible agency can use within the validity period — finding ones still in vigor with available balance is a key business opportunity. Defaults: last 90 days, only active (somenteVigentes=true). Maximum date range per query: ${PNCP_MAX_DATE_RANGE_DAYS} days (PNCP limit); wider windows return HTTP 422.`,
     inputSchema: {
       type: 'object',
       properties: {

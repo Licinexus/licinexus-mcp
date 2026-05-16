@@ -91,7 +91,7 @@ export const comparePeriodos: ToolDef = {
         esfera: {
           type: 'string',
           enum: [...ESFERA_VALUES],
-          description: "Filter by sphere.",
+          description: 'Filter by sphere.',
         },
         metricas: {
           type: 'array',
@@ -134,8 +134,12 @@ export const comparePeriodos: ToolDef = {
       if (respA.isError) return respA;
       if (respB.isError) return respB;
 
-      const firstTextA = respA.content.find((c): c is { type: 'text'; text: string } => c.type === 'text');
-      const firstTextB = respB.content.find((c): c is { type: 'text'; text: string } => c.type === 'text');
+      const firstTextA = respA.content.find(
+        (c): c is { type: 'text'; text: string } => c.type === 'text',
+      );
+      const firstTextB = respB.content.find(
+        (c): c is { type: 'text'; text: string } => c.type === 'text',
+      );
       if (!firstTextA || !firstTextB) {
         return errorResult('aggregate_licitacoes returned non-text content');
       }
@@ -178,7 +182,9 @@ export const comparePeriodos: ToolDef = {
         delta,
       });
     } catch (err) {
-      return errorResult(`Failed to compare periodos: ${err instanceof Error ? err.message : String(err)}`);
+      return errorResult(
+        `Failed to compare periodos: ${err instanceof Error ? err.message : String(err)}`,
+      );
     }
   },
 };
