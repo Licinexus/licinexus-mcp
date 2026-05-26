@@ -5,6 +5,7 @@ import { EsferaSchema, ESFERA_VALUES } from '../utils/esfera.js';
 import { MODALIDADE_IDS } from '../schemas/modalidades.js';
 import type { ToolDef } from './types.js';
 import { errorResult, jsonResult } from './types.js';
+import { t } from '../utils/i18n.js';
 
 const PeriodoSchema = z.object({
   label: z.string().min(1),
@@ -104,7 +105,8 @@ export const comparePeriodos: ToolDef = {
 
   async handler(rawArgs) {
     const parse = ArgsSchema.safeParse(rawArgs ?? {});
-    if (!parse.success) return errorResult(`Invalid arguments: ${parse.error.message}`);
+    if (!parse.success)
+      return errorResult(t('error.invalid_arguments', { msg: parse.error.message }));
     const args = parse.data;
 
     const baseArgs = {
@@ -141,7 +143,7 @@ export const comparePeriodos: ToolDef = {
         (c): c is { type: 'text'; text: string } => c.type === 'text',
       );
       if (!firstTextA || !firstTextB) {
-        return errorResult('aggregate_licitacoes returned non-text content');
+        return errorResult(t('error.aggregate_non_text'));
       }
       const dataA = JSON.parse(firstTextA.text) as AggregateResult;
       const dataB = JSON.parse(firstTextB.text) as AggregateResult;
@@ -183,7 +185,7 @@ export const comparePeriodos: ToolDef = {
       });
     } catch (err) {
       return errorResult(
-        `Failed to compare periodos: ${err instanceof Error ? err.message : String(err)}`,
+        t('error.compare_periodos', { msg: err instanceof Error ? err.message : String(err) }),
       );
     }
   },

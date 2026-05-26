@@ -33,6 +33,7 @@ import {
 } from '../schemas/pncp.js';
 import { cache, TTL_30_MIN, TTL_5_MIN } from '../cache/memory.js';
 import { USER_AGENT } from '../version.js';
+import { t } from '../utils/i18n.js';
 import { getCnpjData, CnpjError } from './cnpj.js';
 import type { CnpjData } from '../schemas/cnpj.js';
 
@@ -119,12 +120,12 @@ function describeAxiosError(err: AxiosError): string {
   if (status) {
     const apiMsg = extractApiMessage(err.response?.data);
     const suffix = apiMsg ? `: ${apiMsg}` : '';
-    return `PNCP returned HTTP ${status} for ${url}${suffix}`;
+    return t('error.pncp_http_status', { status, url, suffix });
   }
   if (err.code === 'ECONNABORTED') {
-    return `PNCP request timed out after ${REQUEST_TIMEOUT_MS}ms (${url})`;
+    return t('error.pncp_timeout', { timeout: REQUEST_TIMEOUT_MS, url });
   }
-  return `PNCP request failed (${url}): ${err.message}`;
+  return t('error.pncp_request_failed', { url, message: err.message });
 }
 
 export class PncpError extends Error {

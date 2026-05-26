@@ -3,6 +3,7 @@ import { getAta, listAtaItens, listAtaArquivos, PncpError } from '../adapters/pn
 import { normalizeCnpj } from '../utils/pncp_id.js';
 import type { ToolDef } from './types.js';
 import { errorResult, jsonResult } from './types.js';
+import { t } from '../utils/i18n.js';
 
 const ArgsSchema = z.object({
   orgaoCnpj: z.string(),
@@ -37,7 +38,8 @@ export const getAtaRp: ToolDef = {
 
   async handler(rawArgs) {
     const parse = ArgsSchema.safeParse(rawArgs ?? {});
-    if (!parse.success) return errorResult(`Invalid arguments: ${parse.error.message}`);
+    if (!parse.success)
+      return errorResult(t('error.invalid_arguments', { msg: parse.error.message }));
     const args = parse.data;
     try {
       const cnpj = normalizeCnpj(args.orgaoCnpj);
@@ -57,7 +59,7 @@ export const getAtaRp: ToolDef = {
       });
     } catch (err) {
       const msg = err instanceof PncpError ? err.message : String(err);
-      return errorResult(`Failed to get ata RP: ${msg}`);
+      return errorResult(t('error.get_ata_rp', { msg }));
     }
   },
 };

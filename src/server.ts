@@ -12,6 +12,7 @@ import { allTools, toolMap } from './tools/index.js';
 import { allPrompts, promptMap } from './prompts/index.js';
 import { allResources, resourceMap } from './resources/index.js';
 import { errorResult } from './tools/types.js';
+import { t } from './utils/i18n.js';
 import { SERVER_NAME, SERVER_VERSION } from './version.js';
 
 export const SERVER_INFO = {
@@ -42,7 +43,7 @@ export function createServer(): Server {
     const { name, arguments: args } = request.params;
     const tool = toolMap.get(name);
     if (!tool) {
-      return errorResult(`Unknown tool: "${name}"`);
+      return errorResult(t('error.unknown_tool', { name }));
     }
     return tool.handler(args);
   });

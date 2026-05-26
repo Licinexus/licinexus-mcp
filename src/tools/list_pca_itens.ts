@@ -3,6 +3,7 @@ import { listPcaItens, PncpError } from '../adapters/pncp.js';
 import { normalizeCnpj } from '../utils/pncp_id.js';
 import type { ToolDef } from './types.js';
 import { errorResult, jsonResult } from './types.js';
+import { t } from '../utils/i18n.js';
 
 const ArgsSchema = z.object({
   orgaoCnpj: z.string(),
@@ -30,7 +31,8 @@ export const listPcaItensTool: ToolDef = {
 
   async handler(rawArgs) {
     const parse = ArgsSchema.safeParse(rawArgs ?? {});
-    if (!parse.success) return errorResult(`Invalid arguments: ${parse.error.message}`);
+    if (!parse.success)
+      return errorResult(t('error.invalid_arguments', { msg: parse.error.message }));
     const args = parse.data;
     try {
       const cnpj = normalizeCnpj(args.orgaoCnpj);
@@ -52,7 +54,7 @@ export const listPcaItensTool: ToolDef = {
       });
     } catch (err) {
       const msg = err instanceof PncpError ? err.message : String(err);
-      return errorResult(`Failed to list PCA itens: ${msg}`);
+      return errorResult(t('error.list_pca_itens', { msg }));
     }
   },
 };

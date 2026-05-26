@@ -2,6 +2,7 @@ import { listContratoTermos, PncpError } from '../adapters/pncp.js';
 import { PncpIdInputSchema, resolvePncpId } from '../utils/pncp_id.js';
 import type { ToolDef } from './types.js';
 import { errorResult, jsonResult } from './types.js';
+import { t } from '../utils/i18n.js';
 
 export const listContratoTermosTool: ToolDef = {
   definition: {
@@ -21,7 +22,8 @@ export const listContratoTermosTool: ToolDef = {
 
   async handler(rawArgs) {
     const parse = PncpIdInputSchema.safeParse(rawArgs ?? {});
-    if (!parse.success) return errorResult(`Invalid arguments: ${parse.error.message}`);
+    if (!parse.success)
+      return errorResult(t('error.invalid_arguments', { msg: parse.error.message }));
     try {
       const { orgaoCnpj, ano, sequencial } = resolvePncpId(parse.data);
       const termos = await listContratoTermos(orgaoCnpj, ano, sequencial);
@@ -31,7 +33,7 @@ export const listContratoTermosTool: ToolDef = {
       });
     } catch (err) {
       const msg = err instanceof PncpError ? err.message : String(err);
-      return errorResult(`Failed to list termos: ${msg}`);
+      return errorResult(t('error.list_termos', { msg }));
     }
   },
 };

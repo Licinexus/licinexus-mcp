@@ -10,6 +10,7 @@ import { EsferaSchema, ESFERA_VALUES, matchesEsfera } from '../utils/esfera.js';
 import type { Contrato } from '../schemas/pncp.js';
 import type { ToolDef } from './types.js';
 import { errorResult, jsonResult } from './types.js';
+import { t } from '../utils/i18n.js';
 
 const ArgsSchema = z.object({
   dataInicial: z.string().refine(isValidPncpDate, 'Format must be YYYYMMDD').optional(),
@@ -104,7 +105,8 @@ export const searchContratos: ToolDef = {
 
   async handler(rawArgs) {
     const parse = ArgsSchema.safeParse(rawArgs ?? {});
-    if (!parse.success) return errorResult(`Invalid arguments: ${parse.error.message}`);
+    if (!parse.success)
+      return errorResult(t('error.invalid_arguments', { msg: parse.error.message }));
     const args = parse.data;
     const range =
       !args.dataInicial || !args.dataFinal
@@ -144,7 +146,7 @@ export const searchContratos: ToolDef = {
       });
     } catch (err) {
       const msg = err instanceof PncpError ? err.message : String(err);
-      return errorResult(`Failed to search contratos: ${msg}`);
+      return errorResult(t('error.search_contratos', { msg }));
     }
   },
 };

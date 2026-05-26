@@ -8,6 +8,7 @@ import {
 } from '../utils/dates.js';
 import type { ToolDef } from './types.js';
 import { errorResult, jsonResult } from './types.js';
+import { t } from '../utils/i18n.js';
 
 const ArgsSchema = z.object({
   dataInicio: z.string().refine(isValidPncpDate, 'Format must be YYYYMMDD').optional(),
@@ -44,7 +45,8 @@ export const searchPca: ToolDef = {
 
   async handler(rawArgs) {
     const parse = ArgsSchema.safeParse(rawArgs ?? {});
-    if (!parse.success) return errorResult(`Invalid arguments: ${parse.error.message}`);
+    if (!parse.success)
+      return errorResult(t('error.invalid_arguments', { msg: parse.error.message }));
     const args = parse.data;
     const range =
       !args.dataInicio || !args.dataFim
@@ -81,7 +83,7 @@ export const searchPca: ToolDef = {
       });
     } catch (err) {
       const msg = err instanceof PncpError ? err.message : String(err);
-      return errorResult(`Failed to search PCA: ${msg}`);
+      return errorResult(t('error.search_pca', { msg }));
     }
   },
 };

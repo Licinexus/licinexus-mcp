@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { CnpjError, getCnpjData } from '../adapters/cnpj.js';
 import type { ToolDef } from './types.js';
 import { errorResult, jsonResult } from './types.js';
+import { t } from '../utils/i18n.js';
 
 const ArgsSchema = z.object({
   cnpj: z.string(),
@@ -26,13 +27,14 @@ export const getCnpjDataTool: ToolDef = {
 
   async handler(rawArgs) {
     const parse = ArgsSchema.safeParse(rawArgs ?? {});
-    if (!parse.success) return errorResult(`Invalid arguments: ${parse.error.message}`);
+    if (!parse.success)
+      return errorResult(t('error.invalid_arguments', { msg: parse.error.message }));
     try {
       const data = await getCnpjData(parse.data.cnpj);
       return jsonResult(data);
     } catch (err) {
       const msg = err instanceof CnpjError ? err.message : String(err);
-      return errorResult(`Failed to fetch CNPJ data: ${msg}`);
+      return errorResult(t('error.get_cnpj_data', { msg }));
     }
   },
 };

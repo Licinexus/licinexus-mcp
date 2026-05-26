@@ -1,3 +1,5 @@
+import { t } from './i18n.js';
+
 export const PNCP_MAX_DATE_RANGE_DAYS = 365;
 
 export function formatPncpDate(d: Date): string {
@@ -48,20 +50,23 @@ export function validatePncpDateRange(
 ): { ok: true } | { ok: false; reason: string } {
   const days = daysBetweenPncpDates(dataInicial, dataFinal);
   if (days == null) {
-    return { ok: false, reason: 'Invalid date format. Use YYYYMMDD.' };
+    return { ok: false, reason: t('error.date_format') };
   }
   if (days < 0) {
     return {
       ok: false,
-      reason: `dataInicial (${dataInicial}) must be on or before dataFinal (${dataFinal}).`,
+      reason: t('error.date_order', { inicial: dataInicial, final: dataFinal }),
     };
   }
   if (days > PNCP_MAX_DATE_RANGE_DAYS) {
     return {
       ok: false,
-      reason:
-        `Date range of ${days} days exceeds the PNCP limit of ${PNCP_MAX_DATE_RANGE_DAYS} days. ` +
-        `Reduce the window between dataInicial (${dataInicial}) and dataFinal (${dataFinal}).`,
+      reason: t('error.date_range_too_wide', {
+        days,
+        max: PNCP_MAX_DATE_RANGE_DAYS,
+        inicial: dataInicial,
+        final: dataFinal,
+      }),
     };
   }
   return { ok: true };

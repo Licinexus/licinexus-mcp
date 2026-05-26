@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeAll } from 'vitest';
 import {
   daysBetweenPncpDates,
   defaultDateRange,
@@ -61,6 +61,9 @@ describe('daysBetweenPncpDates', () => {
 });
 
 describe('validatePncpDateRange', () => {
+  beforeAll(() => {
+    process.env.LICINEXUS_LANG = 'en';
+  });
   it('returns ok=true for a valid range within 365 days', () => {
     const result = validatePncpDateRange('20240101', '20240601');
     expect(result).toEqual({ ok: true });

@@ -2,6 +2,7 @@ import { listContratacaoArquivos, PncpError } from '../adapters/pncp.js';
 import { PncpIdInputSchema, resolvePncpId } from '../utils/pncp_id.js';
 import type { ToolDef } from './types.js';
 import { errorResult, jsonResult } from './types.js';
+import { t } from '../utils/i18n.js';
 
 export const listLicitacaoArquivos: ToolDef = {
   definition: {
@@ -22,7 +23,7 @@ export const listLicitacaoArquivos: ToolDef = {
   async handler(rawArgs) {
     const parse = PncpIdInputSchema.safeParse(rawArgs ?? {});
     if (!parse.success) {
-      return errorResult(`Invalid arguments: ${parse.error.message}`);
+      return errorResult(t('error.invalid_arguments', { msg: parse.error.message }));
     }
     try {
       const { orgaoCnpj, ano, sequencial } = resolvePncpId(parse.data);
@@ -33,7 +34,7 @@ export const listLicitacaoArquivos: ToolDef = {
       });
     } catch (err) {
       const msg = err instanceof PncpError ? err.message : String(err);
-      return errorResult(`Failed to list arquivos: ${msg}`);
+      return errorResult(t('error.list_arquivos', { msg }));
     }
   },
 };

@@ -5,6 +5,7 @@ import { DEFAULT_MODALIDADES, MODALIDADE_IDS, MODALIDADES_PNCP } from '../schema
 import { EsferaSchema, ESFERA_VALUES, matchesEsfera } from '../utils/esfera.js';
 import type { ToolDef } from './types.js';
 import { errorResult, jsonResult } from './types.js';
+import { t } from '../utils/i18n.js';
 
 const MAX_AGGREGATION_DAYS = 1830; // ~5 years
 const MAX_PAGES_PER_BUCKET = 50; // hard cap when paginating for valor/esfera (50 pages × 50 items = 2500)
@@ -232,22 +233,21 @@ export const aggregateLicitacoes: ToolDef = {
 
   async handler(rawArgs) {
     const parse = ArgsSchema.safeParse(rawArgs ?? {});
-    if (!parse.success) return errorResult(`Invalid arguments: ${parse.error.message}`);
+    if (!parse.success)
+      return errorResult(t('error.invalid_arguments', { msg: parse.error.message }));
     const args = parse.data;
 
     const days = daysBetweenPncpDates(args.dataInicial, args.dataFinal);
-    if (days == null) return errorResult('Invalid dataInicial/dataFinal format. Use YYYYMMDD.');
-    if (days < 0) return errorResult('dataInicial must be on or before dataFinal.');
+    if (days == null) return errorResult(t('error.aggregate_date_format'));
+    if (days < 0) return errorResult(t('error.aggregate_date_order'));
     if (days > MAX_AGGREGATION_DAYS) {
-      return errorResult(
-        `Date range of ${days} days exceeds the aggregation limit of ${MAX_AGGREGATION_DAYS} days (~5 years).`,
-      );
+      return errorResult(t('error.aggregate_limit', { days, max: MAX_AGGREGATION_DAYS }));
     }
 
     const modalidades = args.modalidades ?? DEFAULT_MODALIDADES;
     const buckets = generateBuckets(args.dataInicial, args.dataFinal, args.granularidade);
 
-    if (buckets.length === 0) return errorResult('No buckets generated for the given range.');
+    if (buckets.length === 0) return errorResult(t('error.aggregate_no_buckets'));
 
     const wantsValor =
       args.metricas.includes('valorEstimadoTotal') ||
@@ -257,9 +257,7 @@ export const aggregateLicitacoes: ToolDef = {
     // Safety budget for paginated mode
     const totalCalls = buckets.length * modalidades.length;
     if (needsPagination && totalCalls > 200) {
-      return errorResult(
-        `Combination would require ${totalCalls} paginated buckets — too expensive. Reduce range, increase granularity, or limit modalities.`,
-      );
+      return errorResult(t('error.aggregate_too_expensive', { total: totalCalls }));
     }
 
     try {
@@ -354,7 +352,7 @@ export const aggregateLicitacoes: ToolDef = {
       });
     } catch (err) {
       const msg = err instanceof PncpError ? err.message : String(err);
-      return errorResult(`Failed to aggregate: ${msg}`);
+      return errorResult(t('error.aggregate', { msg }));
     }
   },
 };

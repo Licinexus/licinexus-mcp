@@ -337,6 +337,16 @@ LICINEXUS_LOG_LEVEL=debug npx -y @licinexusbr/mcp
 
 E em outra janela, observe os logs enquanto o cliente faz chamadas.
 
+### Idioma das mensagens de erro
+
+Por padrão, as mensagens de erro retornadas pelas tools estão em português. Para recebê-las em inglês:
+
+```bash
+LICINEXUS_LANG=en npx -y @licinexusbr/mcp
+```
+
+Valores aceitos: `pt` (padrão) ou `en`.
+
 ## Ferramentas (18)
 
 ### Compras / Licitações
