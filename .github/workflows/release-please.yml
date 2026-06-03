@@ -14,5 +14,9 @@ jobs:
     steps:
       - uses: googleapis/release-please-action@v5
         with:
+          # A org Licinexus bloqueia "Actions create/approve PRs", então o
+          # GITHUB_TOKEN padrão não consegue abrir o PR de release. Usamos um
+          # PAT/App token dedicado (secret RELEASE_PLEASE_TOKEN) — ver README.
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json

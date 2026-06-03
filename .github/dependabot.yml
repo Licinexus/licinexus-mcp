@@ -12,8 +12,9 @@ updates:
       production-dependencies:
         dependency-type: 'production'
     commit-message:
+      # Sem 'include: scope': evita o escopo duplo chore(deps)(deps-dev) que o
+      # parser de conventional-commits do release-please rejeita.
       prefix: 'chore(deps)'
-      include: 'scope'
 
   - package-ecosystem: 'github-actions'
     directory: '/'
