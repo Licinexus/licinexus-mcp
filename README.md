@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/licinexus-licinexus-mcp-badge.png)](https://mseep.ai/app/licinexus-licinexus-mcp)
+
 <p align="right">
   🇧🇷 Português  ·  🇺🇸 <a href="README.en.md"><b>English version</b></a>
 </p>
