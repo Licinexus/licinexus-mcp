@@ -11,7 +11,22 @@
     ".": {
       "package-name": "@licinexusbr/mcp",
       "changelog-path": "CHANGELOG.md",
-      "extra-files": []
+      "extra-files": [
+        {
+          "type": "generic",
+          "path": "src/version.ts"
+        },
+        {
+          "type": "json",
+          "path": "server.json",
+          "jsonpath": "$.version"
+        },
+        {
+          "type": "json",
+          "path": "server.json",
+          "jsonpath": "$.packages[0].version"
+        }
+      ]
     }
   },
   "changelog-sections": [
