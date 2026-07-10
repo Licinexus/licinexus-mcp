@@ -7,12 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.2] - 2026-07-09
+
 ### Added
 
 - **Sistema de i18n para mensagens de erro** — `src/utils/i18n.ts` com função
   `t(key, params?)` e dicionário PT/EN. Variável `LICINEXUS_LANG` (default: `pt`)
   controla o idioma. Todas as tools, adapter PNCP, server e validações de data
   refatoradas para usar o novo sistema. Closes #18.
+
+### Fixed
+
+- Sincroniza versão entre `package.json`, `src/version.ts`, `server.json` e
+  `.release-please-manifest.json` (estavam em 0.2.1/0.2.0/0.2.0 divergentes) e
+  corrige contagem de tools no `server.json` (16 → 18).
 
 ## [0.2.1] - 2026-05-23
 

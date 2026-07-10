@@ -19,3 +19,4 @@ LAUNCH_PLAYBOOK.pdf
 
 # npm pack outputs
 *.tgz
+.npmrc
