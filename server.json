@@ -1,23 +1,23 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.Licinexus/mcp",
-  "description": "Brazilian public procurement (PNCP) and Federal Revenue CNPJ data \u2014 18 tools, 4 prompts.",
+  "description": "Brazilian public procurement (PNCP) and Federal Revenue CNPJ data — 18 tools, 4 prompts.",
   "repository": {
     "url": "https://github.com/Licinexus/licinexus-mcp",
     "source": "github"
   },
-  "version": "0.2.2",
+  "version": "0.2.3",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "@licinexusbr/mcp",
-      "version": "0.2.2",
+      "version": "0.2.3",
       "transport": {
         "type": "stdio"
       },
       "environmentVariables": [
         {
-          "description": "CNPJ data provider. Options: 'brasilapi' (default) or 'minhareceita'. Both are free public APIs \u2014 no key required.",
+          "description": "CNPJ data provider. Options: 'brasilapi' (default) or 'minhareceita'. Both are free public APIs — no key required.",
           "isRequired": false,
           "format": "string",
           "isSecret": false,

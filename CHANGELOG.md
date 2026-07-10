@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.3](https://github.com/Licinexus/licinexus-mcp/compare/v0.2.2...v0.2.3) (2026-07-10)
+
+
+### Features
+
+* **branding:** add Licinexus logo + animated demo GIF ([ef975e3](https://github.com/Licinexus/licinexus-mcp/commit/ef975e3f7982a20b1fd929c9d76958c57520360c))
+* **demo:** replace CLI demo with Remotion-rendered branded animation ([f8384f7](https://github.com/Licinexus/licinexus-mcp/commit/f8384f788c3eb79099822622ddccf0dde08233d0))
+* **i18n:** traduz mensagens de erro das tools para PT-BR ([#28](https://github.com/Licinexus/licinexus-mcp/issues/28)) ([73f5770](https://github.com/Licinexus/licinexus-mcp/commit/73f5770c909d2d919f22222d2e827cba62aee2b4))
+* **marketing:** add 60s launch video generator ([676ece9](https://github.com/Licinexus/licinexus-mcp/commit/676ece9fbd7456e5071d2022fff6893d7ff5acf9))
+* **phase5:** CNPJ + prompts + resources, smoke-tested against real PNCP ([c583036](https://github.com/Licinexus/licinexus-mcp/commit/c5830362bbbd981bba2fb790e9c612205ac3b6a4))
+* **pncp:** add 5 tools for licitações (Phase 1) ([5e109a6](https://github.com/Licinexus/licinexus-mcp/commit/5e109a66241ae8bcf9abc19a4287813bc3c158be))
+* **pncp:** Phases 2–4 — contratos, atas RP, órgãos, fornecedores, PCA ([97e0601](https://github.com/Licinexus/licinexus-mcp/commit/97e06018e34767749c4b2fbe770f6c91ed00bd1b))
+* v0.2.0 — MCP analítico (Fase 7) — aggregate + compare + esfera (closes [#17](https://github.com/Licinexus/licinexus-mcp/issues/17)) ([d0adcaa](https://github.com/Licinexus/licinexus-mcp/commit/d0adcaa63885065b277cb7d7b772ce98d63034bd))
+
+
+### Bug Fixes
+
+* **ci:** regenerate package-lock.json to match package.json ([b8eca71](https://github.com/Licinexus/licinexus-mcp/commit/b8eca71a10345e3322750c167c6203e35548812d))
+* **pncp:** aumentar timeout de 20s para 45s ([ee1126a](https://github.com/Licinexus/licinexus-mcp/commit/ee1126a77e5f7b468bf3d1880237c606afbf4a64))
+* **pncp:** cap retry budget em 54.5s para caber no client MCP (60s) ([9fe23c5](https://github.com/Licinexus/licinexus-mcp/commit/9fe23c50db7d1592cfd27550a8fd6260b934ffd4))
+* **pncp:** validar janela de data &lt;= 365 dias antes de chamar PNCP (closes [#15](https://github.com/Licinexus/licinexus-mcp/issues/15)) ([94fd53e](https://github.com/Licinexus/licinexus-mcp/commit/94fd53e4288eb09b7940a5a0ae888bd19e039f93))
+* **tsconfig:** pin types: ["node"] for TypeScript 6 compatibility ([a5b957a](https://github.com/Licinexus/licinexus-mcp/commit/a5b957a15ecc78d87d60dbc27fc97efcf0b1e3c6))
+
 ## [Unreleased]
 
 ## [0.2.2] - 2026-07-09
