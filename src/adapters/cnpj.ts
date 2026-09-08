@@ -127,7 +127,7 @@ function cpfcnpjTransform(raw: unknown, cnpj: string): unknown {
 }
 
 function getProvider(): CnpjProvider {
-  const env = process.env.CNPJ_PROVIDER?.toLowerCase();
+  const env = process.env.CNPJ_PROVIDER?.trim().toLowerCase();
   if (env === 'minhareceita') return 'minhareceita';
   if (env === 'cpfcnpj') return 'cpfcnpj';
   return 'brasilapi';

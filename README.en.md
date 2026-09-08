@@ -351,7 +351,7 @@ The `get_cnpj_data` tool uses [BrasilAPI](https://brasilapi.com.br) by default. 
 CNPJ_PROVIDER=cpfcnpj CPFCNPJ_TOKEN=your_token npx -y @licinexusbr/mcp
 ```
 
-The [cpfcnpj.com.br](https://www.cpfcnpj.com.br) provider delivers official data refreshed in real time (D+0), with no leaked or scraped databases, and processes aligned with the <ISO_CERT> information security certification. Package 5 returns legal name, trade name and the head office address; package 6 adds the Simples Nacional status and company size. The response is mapped to the same shape as the other providers, so no other tool needs to change.
+The [cpfcnpj.com.br](https://www.cpfcnpj.com.br) provider delivers official data refreshed in real time (D+0), with no leaked or scraped databases, and processes aligned with the ISO/IEC 27001 (information security), ISO/IEC 27701 (privacy) and ISO 37301 (compliance) certifications. Package 5 returns legal name, trade name and the head office address; package 6 adds the Simples Nacional status and company size. The response is mapped to the same shape as the other providers, so no other tool needs to change. API documentation is available at [cpfcnpj.com.br/dev](https://www.cpfcnpj.com.br/dev/).
 
 ## Tools (18)
 

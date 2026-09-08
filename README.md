@@ -361,7 +361,7 @@ A tool `get_cnpj_data` usa a [BrasilAPI](https://brasilapi.com.br) por padrão. 
 CNPJ_PROVIDER=cpfcnpj CPFCNPJ_TOKEN=seu_token npx -y @licinexusbr/mcp
 ```
 
-O provedor [cpfcnpj.com.br](https://www.cpfcnpj.com.br) entrega dados oficiais atualizados em tempo real (D+0), sem uso de bases vazadas ou raspadas, com processos em conformidade com a certificação <ISO_CERT> de segurança da informação. O pacote 5 traz razão social, nome fantasia e endereço da matriz; o pacote 6 acrescenta a situação no Simples Nacional e o porte. A resposta é mapeada para o mesmo formato dos demais provedores, então nenhuma outra tool precisa mudar.
+O provedor [cpfcnpj.com.br](https://www.cpfcnpj.com.br) entrega dados oficiais atualizados em tempo real (D+0), sem uso de bases vazadas ou raspadas, com processos alinhados às certificações ISO/IEC 27001 (segurança da informação), ISO/IEC 27701 (privacidade) e ISO 37301 (compliance). O pacote 5 traz razão social, nome fantasia e endereço da matriz; o pacote 6 acrescenta a situação no Simples Nacional e o porte. A resposta é mapeada para o mesmo formato dos demais provedores, então nenhuma outra tool precisa mudar. A documentação da API está em [cpfcnpj.com.br/dev](https://www.cpfcnpj.com.br/dev/).
 
 ## Ferramentas (18)
 

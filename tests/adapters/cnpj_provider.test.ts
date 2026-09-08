@@ -84,6 +84,32 @@ describe('getCnpjData — provedor cpfcnpj', () => {
     expect(result.porte).toBe('ME');
   });
 
+  it('mapeia o pacote 5 (sem Simples nem porte) sem quebrar', async () => {
+    process.env.CPFCNPJ_PACOTE = '5';
+    const okPacote5 = {
+      status: 1,
+      razao: 'ALAS TECNOLOGIA LTDA',
+      fantasia: 'CPFCNPJ',
+      matrizEndereco: {
+        logradouro: 'Rua Exemplo',
+        numero: 100,
+        bairro: 'Centro',
+        cep: '30110-000',
+        cidade: 'BELO HORIZONTE',
+        uf: 'MG',
+      },
+    };
+    httpGet.mockResolvedValue({ data: okPacote5 });
+
+    const result = await getCnpjData('27272134000118');
+
+    expect(result._provider).toBe('cpfcnpj');
+    expect(result.razao_social).toBe('ALAS TECNOLOGIA LTDA');
+    expect(result.municipio).toBe('BELO HORIZONTE');
+    expect(result.opcao_pelo_simples).toBeNull();
+    expect(result.porte).toBeNull();
+  });
+
   it('usa o token e o pacote na URL da requisição', async () => {
     process.env.CPFCNPJ_PACOTE = '5';
     httpGet.mockResolvedValue({ data: OK_PACOTE_6 });
