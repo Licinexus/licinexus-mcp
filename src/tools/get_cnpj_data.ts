@@ -12,7 +12,7 @@ export const getCnpjDataTool: ToolDef = {
   definition: {
     name: 'get_cnpj_data',
     description:
-      "Get a Brazilian company's public registration data: legal name, trade name, primary CNAE, secondary CNAEs, address, partners (QSA), capital, juridical nature, Simples/MEI status. Source: BrasilAPI by default (free aggregator over Receita Federal Open Data). Set CNPJ_PROVIDER=minhareceita to switch.",
+      "Get a Brazilian company's public registration data: legal name, trade name, primary CNAE, secondary CNAEs, address, partners (QSA), capital, juridical nature, Simples/MEI status. Source: BrasilAPI by default (free aggregator over Receita Federal Open Data). Set CNPJ_PROVIDER=minhareceita or CNPJ_PROVIDER=cpfcnpj to switch (cpfcnpj requires CPFCNPJ_TOKEN).",
     inputSchema: {
       type: 'object',
       properties: {

@@ -337,6 +337,22 @@ LICINEXUS_LOG_LEVEL=debug npx -y @licinexusbr/mcp
 
 In another window, watch the logs while the client makes calls.
 
+### CNPJ data provider
+
+The `get_cnpj_data` tool uses [BrasilAPI](https://brasilapi.com.br) by default. To switch sources, set `CNPJ_PROVIDER`:
+
+| Provider | Value | Configuration |
+| --- | --- | --- |
+| BrasilAPI (default) | `brasilapi` | None |
+| MinhaReceita | `minhareceita` | None |
+| cpfcnpj.com.br | `cpfcnpj` | `CPFCNPJ_TOKEN` required; `CPFCNPJ_PACOTE` optional (default `6`) |
+
+```bash
+CNPJ_PROVIDER=cpfcnpj CPFCNPJ_TOKEN=your_token npx -y @licinexusbr/mcp
+```
+
+The [cpfcnpj.com.br](https://www.cpfcnpj.com.br) provider delivers official data refreshed in real time (D+0), with no leaked or scraped databases, and processes aligned with the <ISO_CERT> information security certification. Package 5 returns legal name, trade name and the head office address; package 6 adds the Simples Nacional status and company size. The response is mapped to the same shape as the other providers, so no other tool needs to change.
+
 ## Tools (18)
 
 ### Compras / Licitações
@@ -378,7 +394,7 @@ In another window, watch the logs while the client makes calls.
 
 | Tool            | What it does                                                                                                                                                   |
 | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `get_cnpj_data` | Receita Federal cadastro (CNAEs, sócios, capital, situação) via [BrasilAPI](https://brasilapi.com.br) (default) or MinhaReceita (`CNPJ_PROVIDER=minhareceita`) |
+| `get_cnpj_data` | Receita Federal cadastro (CNAEs, sócios, capital, situação) via [BrasilAPI](https://brasilapi.com.br) (default), MinhaReceita (`CNPJ_PROVIDER=minhareceita`) or cpfcnpj.com.br (`CNPJ_PROVIDER=cpfcnpj`) |
 
 ### Aggregation analytics (v0.2.0)
 

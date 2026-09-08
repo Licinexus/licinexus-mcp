@@ -15,11 +15,12 @@ export class CnpjError extends Error {
   }
 }
 
-export type CnpjProvider = 'brasilapi' | 'minhareceita';
+export type CnpjProvider = 'brasilapi' | 'minhareceita' | 'cpfcnpj';
 
 interface ProviderConfig {
   baseURL: string;
   path: (cnpj: string) => string;
+  transform?: (raw: unknown, cnpj: string) => unknown;
 }
 
 const PROVIDERS: Record<CnpjProvider, ProviderConfig> = {
@@ -31,11 +32,104 @@ const PROVIDERS: Record<CnpjProvider, ProviderConfig> = {
     baseURL: 'https://minhareceita.org',
     path: (cnpj) => `/${cnpj}`,
   },
+  cpfcnpj: {
+    baseURL: 'https://api.cpfcnpj.com.br',
+    path: (cnpj) => `/${cpfcnpjToken()}/${cpfcnpjPacote()}/${cnpj}`,
+    transform: cpfcnpjTransform,
+  },
 };
+
+const CPFCNPJ_DEFAULT_PACOTE = '6';
+
+function cpfcnpjToken(): string {
+  const token = process.env.CPFCNPJ_TOKEN?.trim();
+  if (!token) {
+    throw new CnpjError('CPFCNPJ_TOKEN is required when CNPJ_PROVIDER=cpfcnpj');
+  }
+  return token;
+}
+
+function cpfcnpjPacote(): string {
+  const pacote = process.env.CPFCNPJ_PACOTE?.trim();
+  return pacote && /^\d+$/.test(pacote) ? pacote : CPFCNPJ_DEFAULT_PACOTE;
+}
+
+function coerceString(value: unknown): string | null {
+  if (value === null || value === undefined) return null;
+  if (typeof value === 'string') return value;
+  if (typeof value === 'number') return String(value);
+  return null;
+}
+
+function coerceOptante(value: unknown): boolean | null {
+  if (typeof value === 'boolean') return value;
+  if (typeof value === 'number') return value !== 0;
+  if (typeof value === 'string') {
+    const normalized = value.trim().toLowerCase();
+    if (['sim', 'true', '1', 's'].includes(normalized)) return true;
+    if (['nao', 'não', 'false', '0', 'n', ''].includes(normalized)) return false;
+  }
+  return null;
+}
+
+interface CpfCnpjEndereco {
+  logradouro?: unknown;
+  numero?: unknown;
+  complemento?: unknown;
+  bairro?: unknown;
+  cep?: unknown;
+  cidade?: unknown;
+  uf?: unknown;
+}
+
+interface CpfCnpjResponse {
+  status?: unknown;
+  erro?: unknown;
+  erroCodigo?: unknown;
+  razao?: unknown;
+  fantasia?: unknown;
+  matrizEndereco?: CpfCnpjEndereco;
+  ibge?: { cidade?: { ibge_id?: unknown } };
+  simplesNacional?: { optante?: unknown; situacao?: unknown };
+  porte?: unknown;
+}
+
+function cpfcnpjTransform(raw: unknown, cnpj: string): unknown {
+  const body = (raw ?? {}) as CpfCnpjResponse;
+  const status = coerceString(body.status);
+
+  if (status !== '1') {
+    const detail = coerceString(body.erro) ?? 'unknown error';
+    const code = coerceString(body.erroCodigo);
+    const suffix = code ? ` (code ${code})` : '';
+    throw new CnpjError(`cpfcnpj returned status ${status ?? 'null'}: ${detail}${suffix}`);
+  }
+
+  const endereco = body.matrizEndereco ?? {};
+  const porte = coerceString(body.porte);
+  const simples = body.simplesNacional ?? {};
+
+  return {
+    cnpj,
+    razao_social: coerceString(body.razao),
+    nome_fantasia: coerceString(body.fantasia),
+    logradouro: coerceString(endereco.logradouro),
+    numero: coerceString(endereco.numero),
+    complemento: coerceString(endereco.complemento),
+    bairro: coerceString(endereco.bairro),
+    cep: coerceString(endereco.cep),
+    municipio: coerceString(endereco.cidade),
+    uf: coerceString(endereco.uf),
+    codigo_municipio: coerceString(body.ibge?.cidade?.ibge_id),
+    opcao_pelo_simples: coerceOptante(simples.optante),
+    porte: porte,
+  };
+}
 
 function getProvider(): CnpjProvider {
   const env = process.env.CNPJ_PROVIDER?.toLowerCase();
   if (env === 'minhareceita') return 'minhareceita';
+  if (env === 'cpfcnpj') return 'cpfcnpj';
   return 'brasilapi';
 }
 
@@ -98,8 +192,10 @@ export async function getCnpjData(cnpj: string): Promise<CnpjData & { _provider:
   const client = clientFor(provider);
 
   try {
-    const { data } = await withRetry(() => client.get(cfg.path(digits)));
-    const parsed = CnpjDataSchema.parse(data);
+    const requestPath = cfg.path(digits);
+    const { data } = await withRetry(() => client.get(requestPath));
+    const shaped = cfg.transform ? cfg.transform(data, digits) : data;
+    const parsed = CnpjDataSchema.parse(shaped);
     const out = { ...parsed, _provider: provider };
     cache.set(cacheKey, out, TTL_1_HOUR);
     return out;
