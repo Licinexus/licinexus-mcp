@@ -347,6 +347,22 @@ LICINEXUS_LANG=en npx -y @licinexusbr/mcp
 
 Valores aceitos: `pt` (padrão) ou `en`.
 
+### Provedor de dados de CNPJ
+
+A tool `get_cnpj_data` usa a [BrasilAPI](https://brasilapi.com.br) por padrão. Para trocar de fonte, defina `CNPJ_PROVIDER`:
+
+| Provedor | Valor | Configuração |
+| --- | --- | --- |
+| BrasilAPI (padrão) | `brasilapi` | Nenhuma |
+| MinhaReceita | `minhareceita` | Nenhuma |
+| cpfcnpj.com.br | `cpfcnpj` | `CPFCNPJ_TOKEN` obrigatório; `CPFCNPJ_PACOTE` opcional (padrão `6`) |
+
+```bash
+CNPJ_PROVIDER=cpfcnpj CPFCNPJ_TOKEN=seu_token npx -y @licinexusbr/mcp
+```
+
+O provedor [cpfcnpj.com.br](https://www.cpfcnpj.com.br) entrega dados oficiais atualizados em tempo real (D+0), sem uso de bases vazadas ou raspadas, com processos alinhados às certificações ISO/IEC 27001 (segurança da informação), ISO/IEC 27701 (privacidade) e ISO 37301 (compliance). O pacote 5 traz razão social, nome fantasia e endereço da matriz; o pacote 6 acrescenta a situação no Simples Nacional e o porte. A resposta é mapeada para o mesmo formato dos demais provedores, então nenhuma outra tool precisa mudar. A documentação da API está em [cpfcnpj.com.br/dev](https://www.cpfcnpj.com.br/dev/).
+
 ## Ferramentas (18)
 
 ### Compras / Licitações
@@ -388,7 +404,7 @@ Valores aceitos: `pt` (padrão) ou `en`.
 
 | Ferramenta      | O que faz                                                                                                                                                        |
 | --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `get_cnpj_data` | Cadastro da Receita Federal (CNAEs, sócios, capital, situação) via [BrasilAPI](https://brasilapi.com.br) (padrão) ou MinhaReceita (`CNPJ_PROVIDER=minhareceita`) |
+| `get_cnpj_data` | Cadastro da Receita Federal (CNAEs, sócios, capital, situação) via [BrasilAPI](https://brasilapi.com.br) (padrão), MinhaReceita (`CNPJ_PROVIDER=minhareceita`) ou cpfcnpj.com.br (`CNPJ_PROVIDER=cpfcnpj`) |
 
 ### Análise agregada (v0.2.0)
 

@@ -36,7 +36,9 @@ Todos os dados expostos por este MCP vêm de **APIs públicas e anônimas do gov
 
 **Licença/Termos:** Dado público da Receita Federal (Dados Abertos). BrasilAPI é mantida pela comunidade e gratuita.
 
-**Trocável:** usuários podem sobrescrever via variável `CNPJ_PROVIDER`. Versões futuras podem suportar `minhareceita`, `cnpja`, ou um endpoint hospedado pela Licinexus.
+**Trocável:** usuários podem sobrescrever via variável `CNPJ_PROVIDER`. Além do padrão, já são suportados `minhareceita` e `cpfcnpj`.
+
+**Provedor opcional [cpfcnpj.com.br](https://www.cpfcnpj.com.br)** (`CNPJ_PROVIDER=cpfcnpj`): API comercial com token por conta (`CPFCNPJ_TOKEN`). Entrega dados oficiais atualizados em tempo real (D+0), sem uso de bases vazadas ou raspadas, com processos alinhados às certificações ISO/IEC 27001 (segurança da informação), ISO/IEC 27701 (privacidade) e ISO 37301 (compliance). O pacote é configurável por `CPFCNPJ_PACOTE` (padrão `6`): o pacote 5 traz razão social, nome fantasia e endereço da matriz, e o pacote 6 acrescenta situação no Simples Nacional e porte. A chave de acesso é do usuário e não acompanha o pacote. Documentação da API: [cpfcnpj.com.br/dev](https://www.cpfcnpj.com.br/dev/).
 
 ## O que NÃO usamos
 

@@ -32,7 +32,9 @@ We do **not** ship the Receita Federal monthly dump (~15GB) — that's appropria
 
 **License/Terms:** Public data from Receita Federal Dados Abertos. BrasilAPI is community-maintained and free.
 
-**Swappable:** users can override via `CNPJ_PROVIDER` env var. Future versions may support `minhareceita`, `cnpja`, or a Licinexus-hosted public endpoint.
+**Swappable:** users can override via `CNPJ_PROVIDER` env var. Besides the default, `minhareceita` and `cpfcnpj` are already supported.
+
+**Optional [cpfcnpj.com.br](https://www.cpfcnpj.com.br) provider** (`CNPJ_PROVIDER=cpfcnpj`): a commercial API with a per-account token (`CPFCNPJ_TOKEN`). It delivers official data refreshed in real time (D+0), with no leaked or scraped databases, and processes aligned with the ISO/IEC 27001 (information security), ISO/IEC 27701 (privacy) and ISO 37301 (compliance) certifications. The package is set via `CPFCNPJ_PACOTE` (default `6`): package 5 returns legal name, trade name and the head office address, and package 6 adds Simples Nacional status and company size. The access key belongs to the user and is not bundled with this package. API documentation: [cpfcnpj.com.br/dev](https://www.cpfcnpj.com.br/dev/).
 
 ## What we do NOT use
 
